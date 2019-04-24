@@ -5,7 +5,7 @@
 }
 
 <style>
-    .edit-btn {
+    .action-btn {
         width: 100px;
     }
 
@@ -47,10 +47,13 @@
             @Html.DisplayFor(Model => Model.Scorecard.DefaultTestValue)
         </dd>
     </dl>
-    <span style="float:right">
-        @Html.ActionLink("Edit Details", "EditScorecardDetails", new { id = Model.Scorecard.ID }, new { @class = "btn btn-secondary btn-sm edit-btn" })
-        @Html.ActionLink("Add Tests", "AddScorecardTests", new { id = Model.Scorecard.ID }, new { @class = "btn btn-success btn-sm edit-btn" })
-    </span>
+    <div>
+        @Html.ActionLink("Delete", "DeleteScorecard", new { id = Model.Scorecard.ID }, new { @class = "btn btn-danger btn-sm action-btn", @style="float:left" })
+    </div>
+    <div style="float:right">
+        @Html.ActionLink("Edit Details", "EditScorecardDetails", new { id = Model.Scorecard.ID }, new { @class = "btn btn-secondary btn-sm action-btn" })
+        @Html.ActionLink("Add Tests", "AddScorecardTests", new { id = Model.Scorecard.ID }, new { @class = "btn btn-success btn-sm action-btn" })
+    </div>
     <br />
     <br />
 

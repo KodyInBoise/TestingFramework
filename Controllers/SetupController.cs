@@ -246,5 +246,19 @@ namespace TestingFramework.Controllers
 
             return RedirectToAction("ScorecardDetails", new { id = scorecard.ID });
         }
+
+        [HttpGet] 
+        public IActionResult DeleteScorecard(Guid id)
+        {
+            var scorecard = _database.Scorecards.Find(id);
+
+            if (scorecard != null)
+            {
+                _database.Scorecards.Remove(scorecard);
+                _database.SaveChanges();
+            }
+
+            return RedirectToAction("Index");
+        }
     }
 }
