@@ -36,17 +36,12 @@
                 <span asp-validation-for="Value" class="text-danger"></span>
             </div>
             <div class="form-group">
-                @Html.ActionLink("Remove", "RemoveScorecardTest", new { id = Model.ID, scorecardID = Model.ScorecardID },
-                    new { @class = "btn btn-danger btns", @style="float:left" })
-                <input type="submit" value="Save" class="btn btn-primary btns" style="float:right"/>
+                @Html.ActionLink("Back", "ScorecardDetails", new { id = Model.ScorecardID },
+                    new { @class = "btn btn-secondary btns", @style="float:left" })
+                <input type="submit" value="Save" class="btn btn-success btns" style="float:right"/>
             </div>
         </form>
     </div>
-</div>
-
-<br />
-<div>
-    <a asp-action="ScorecardDetails" asp-route-id="@Model.ScorecardID">Back to Scorecard Details</a>
 </div>
 
 @section Scripts {

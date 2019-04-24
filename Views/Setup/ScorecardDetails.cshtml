@@ -5,7 +5,7 @@
 }
 
 <style>
-    .edit-btn {
+    .action-btn {
         width: 100px;
     }
 
@@ -41,23 +41,24 @@
             @Html.DisplayFor(model => testCount)
         </dd>
         <dt class="col-sm-2">
-            Total Points
+            Default Test Value
         </dt>
         <dd class="col-sm-10">
-            @{
-                var totalPoints = Model.GetTotalValue();
-            }
-            @Html.DisplayFor(model => totalPoints)
+            @Html.DisplayFor(Model => Model.Scorecard.DefaultTestValue)
         </dd>
     </dl>
-    <span style="float:right">
-        @Html.ActionLink("Edit Details", "EditScorecardDetails", new { id = Model.Scorecard.ID }, new { @class = "btn btn-secondary btn-sm edit-btn" })
-        @Html.ActionLink("Add Tests", "AddScorecardTests", new { id = Model.Scorecard.ID }, new { @class = "btn btn-success btn-sm edit-btn" })
-    </span>
+    <div>
+        @Html.ActionLink("Delete", "DeleteScorecard", new { id = Model.Scorecard.ID }, new { @class = "btn btn-danger btn-sm action-btn", @style="float:left" })
+    </div>
+    <div style="float:right">
+        @Html.ActionLink("Edit Details", "EditScorecardDetails", new { id = Model.Scorecard.ID }, new { @class = "btn btn-secondary btn-sm action-btn" })
+        @Html.ActionLink("Add Tests", "AddScorecardTests", new { id = Model.Scorecard.ID }, new { @class = "btn btn-success btn-sm action-btn" })
+    </div>
+    <br />
     <br />
     <br />
 
-    <h3 style="float: left">Tests</h3>
+    <h3 style="float: left">Scorecard Tests</h3>
     <table class="table text-col">
         @{
             var defaultTest = Model.Tests.FirstOrDefault();
@@ -88,11 +89,14 @@
                     <td width="50%">
                         @Html.DisplayFor(modelItem => item.Description)
                     </td>
-                    <td width="20%">
+                    <td width="10%">
                         @Html.DisplayFor(modelItem => item.Value)
                     </td>
-                    <td width="20%">
-                        @Html.ActionLink("Edit", "EditScorecardTest", new { id = item.ID }, new { @class = "btn btn-primary btn-sm edit-btn", @style = "float:right" })
+                    <td width="30%">
+                        @Html.ActionLink("Remove", "RemoveScorecardTest", new { id = item.ID, scorecardID = Model.Scorecard.ID },
+                            new { @class = "btn btn-warning btn-sm action-btn" })
+                        @Html.ActionLink("Edit", "EditScorecardTest", new { id = item.ID },
+                            new { @class = "btn btn-secondary btn-sm action-btn" })
                     </td>
                 </tr>
             }
