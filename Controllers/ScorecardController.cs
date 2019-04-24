@@ -219,5 +219,11 @@ namespace TestingFramework.Controllers
 
             return View(viewModel);
         }
+
+        [HttpGet]
+        public IActionResult EditProgressDetails(Guid id)
+        {
+            return View();
+        }
     }
 }
