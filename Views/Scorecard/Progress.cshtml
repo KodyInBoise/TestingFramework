@@ -1,0 +1,102 @@
+﻿@model TestingFramework.ViewModels.ScorecardProgressViewModel
+
+@{
+    ViewData["Title"] = "Progress";
+}
+
+<style>
+    .h3-btn {
+        width: 150px;
+        margin-left: 25px;
+    }
+
+    .row-btn {
+        width: 100px;
+    }
+
+    .header{
+        text-align: center
+    }
+    
+</style>
+
+<h1>Scorecard Progress Overview</h1>
+<hr />
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">
+            Name
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Scorecard.Name)
+        </dd>
+        <dt class="col-sm-2">
+            Description
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Scorecard.Description)
+        </dd>
+        <dt class="col-sm-2">
+            Completed
+        </dt>
+        <dd class="col-sm-10">
+            @{
+                var completed = Model.GetTotalCompletedPercent();
+            }
+            @Html.DisplayFor(model => completed)
+        </dd>
+    </dl>
+    <br />
+    @Html.ActionLink("Submit", "SubmitProgress", new { id = Model.Progress.ID }, new { @class = "btn btn-success h3-btn", @style = "float:right" })
+    @Html.ActionLink("Delete", "Delete", new { id = Model.Progress.ID }, new { @class = "btn btn-danger h3-btn", @style = "float:right" })
+</div>
+<br />
+<hr />
+<br />
+<br />
+<br />
+
+@foreach (var category in Model.Categories)
+{
+    var categoryTests = Model.Scorecard.Tests.Where(t => t.CategoryID == category.ID);
+    var defaultTest = categoryTests.FirstOrDefault();
+    var categoryCompletion = Model.CategoryCompletePercentages.GetValueOrDefault(category.ID);
+
+    <h3 style="float:left">@category.Name</h3>
+    @Html.ActionLink("Start", "CategoryTests", new { id=Model.Progress.ID, categoryID = category.ID }, new { @class = "btn btn-success h3-btn", @style = "float:right" })
+    <table class="table text-col">
+        <thead>
+            <tr>
+                <th width="50%">
+                    Description
+                </th>
+                <th width="25%">
+                    Status
+                </th>
+                <th style="text-align:right" width="25%">
+                    @categoryCompletion Complete
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in categoryTests)
+            {
+                var testStatus = Model.GetTestStatus(item.ID);
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => testStatus)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "EditTestResult", new { id = Model.Progress.ID, testID = item.ID }, new { @class = "btn btn-primary btn-sm row-btn", @style = "float:right" })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <br />
+    <br />
+}

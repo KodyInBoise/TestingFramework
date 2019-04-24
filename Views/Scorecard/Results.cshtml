@@ -1,0 +1,63 @@
+﻿@model TestingFramework.ViewModels.Scorecard.ResultsViewModel
+
+@{
+    ViewData["Title"] = "Results";
+}
+
+<style>
+    .action-btn{
+        width: 100px;
+    }
+</style>
+
+<h1>Scorecard Results</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Completed
+            </th>
+            <th>
+                Name
+            </th>
+            <th>
+                User
+            </th>
+            <th>
+                Notes
+            </th>
+            <th>
+                Score
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Results)
+        {
+            var scorecardName = Model.GetScorecardName(item.ScorecardID);
+            var score = Model.GetResultsScore(item.ID);
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CompletedTimestamp)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => scorecardName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.User)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ScorecardNotes)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => score)
+                </td>
+                <td>
+                    @Html.ActionLink("Details", "ResultsDetails", new { id = item.ID }, new { @class = "btn btn-sm btn-primary action-btn", @style = "float:right" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

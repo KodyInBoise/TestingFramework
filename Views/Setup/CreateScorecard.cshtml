@@ -1,0 +1,47 @@
+﻿@model TestingFramework.Models.ScorecardModel
+
+@{
+    ViewData["Title"] = "Create Scorecard";
+}
+
+<style>
+    .action-btn{
+        width: 100px;
+    }
+</style>
+
+<h1>Create New Scorecard</h1>
+<hr />
+<br />
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CreateScorecard">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @Html.HiddenFor(model => model.ID)
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DefaultTestValue" class="control-label">Default Test Value</label>
+                <input asp-for="DefaultTestValue" class="form-control" />
+                <span asp-validation-for="DefaultTestValue" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                @Html.ActionLink("Back", "Index", new { }, new { @class = "btn btn-secondary action-btn", @style = "float:left" })
+                <input type="submit" value="Create" class="btn btn-success action-btn" style="float:right" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

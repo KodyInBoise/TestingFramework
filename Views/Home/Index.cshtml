@@ -1,0 +1,103 @@
+﻿@model TestingFramework.ViewModels.HomeViewModel
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<style>
+    .start-btn {
+        width: 150px;
+    }
+</style>
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+</div>
+<br />
+
+<h3 style="float: left">Scorecards In Progress</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th width="20%">
+                Started
+            </th>
+            <th width="25%">
+                Scorecard
+            </th>
+            <th width="25%">
+                User
+            </th>
+            <th width="10%">
+                Completed
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.ScorecardsInProgress)
+        {
+            var scorecardName = Model.Scorecards.FirstOrDefault(sc => sc.ID == item.ScorecardID).Name;
+            var progress = Model.GetProgress(item.ID);
+
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Started)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => scorecardName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.User)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => progress)
+                </td>
+                <td>
+                    @Html.ActionLink("Resume", "Progress", "Scorecard", new { id = item.ID }, new { @class = "btn btn-sm btn-primary start-btn", @style = "float:right" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<br />
+<br />
+<h3 style="float: left">All Scorecards</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Description
+            </th>
+            <th>
+                Test Count
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Scorecards)
+        {
+            var scorecardName = Model.Scorecards.FirstOrDefault(sc => sc.ID == item.ID).Name;
+            var testCount = item.Tests.Count();
+            <tr>
+                <td width="20%">
+                    @Html.DisplayFor(modelItem => scorecardName)
+                </td>
+                <td width="50%">
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td width="10%">
+                    @Html.DisplayFor(modelItem => testCount)
+                </td>
+                <td width="20%">
+                    @Html.ActionLink("Start", "StartScorecard", "Scorecard", new { id = item.ID }, new { @class = "btn btn-sm btn-success start-btn", @style = "float:right" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

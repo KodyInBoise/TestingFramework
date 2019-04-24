@@ -1,0 +1,104 @@
+﻿@model TestingFramework.ViewModels.ScorecardDetailsViewModel
+
+@{
+    ViewData["Title"] = "Scorecard Details";
+}
+
+<style>
+    .edit-btn {
+        width: 100px;
+    }
+
+    .text-col {
+        text-align: center;
+    }
+</style>
+
+<h1>Scorecard Details</h1>
+<hr />
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">
+            Name
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Scorecard.Name)
+        </dd>
+        <dt class="col-sm-2">
+            Description
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Scorecard.Description)
+        </dd>
+        <dt class="col-sm-2">
+            Test Count
+        </dt>
+        <dd class="col-sm-10">
+            @{
+                var testCount = Model.Tests.Count();
+            }
+            @Html.DisplayFor(model => testCount)
+        </dd>
+        <dt class="col-sm-2">
+            Total Points
+        </dt>
+        <dd class="col-sm-10">
+            @{
+                var totalPoints = Model.GetTotalValue();
+            }
+            @Html.DisplayFor(model => totalPoints)
+        </dd>
+    </dl>
+    <span style="float:right">
+        @Html.ActionLink("Edit Details", "EditScorecardDetails", new { id = Model.Scorecard.ID }, new { @class = "btn btn-secondary btn-sm edit-btn" })
+        @Html.ActionLink("Add Tests", "AddScorecardTests", new { id = Model.Scorecard.ID }, new { @class = "btn btn-success btn-sm edit-btn" })
+    </span>
+    <br />
+    <br />
+
+    <h3 style="float: left">Tests</h3>
+    <table class="table text-col">
+        @{
+            var defaultTest = Model.Tests.FirstOrDefault();
+        }
+        <thead>
+            <tr>
+                <th>
+                    Category
+                </th>
+                <th>
+                    Description
+                </th>
+                <th>
+                    Value
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Tests)
+            {
+                var categoryName = Model.GetCategoryName(item.CategoryID);
+
+                <tr>
+                    <td width="10%">
+                        @Html.DisplayFor(modelItem => categoryName)
+                    </td>
+                    <td width="50%">
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td width="20%">
+                        @Html.DisplayFor(modelItem => item.Value)
+                    </td>
+                    <td width="20%">
+                        @Html.ActionLink("Edit", "EditScorecardTest", new { id = item.ID }, new { @class = "btn btn-primary btn-sm edit-btn", @style = "float:right" })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div>
+    <a asp-action="Index">Back to Setup</a>
+</div>

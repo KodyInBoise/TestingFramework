@@ -1,0 +1,42 @@
+﻿@model TestingFramework.ViewModels.Tasks.CreateTaskViewModel
+
+@{
+    ViewData["Title"] = "Create Task";
+}
+
+<style>
+    .entry-text{
+        height: 100px;
+        width: 100%;
+    }
+
+    .label{
+        font-weight: bold;
+    }
+</style>
+
+<h1>Create Task</h1>
+<hr />
+<br />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div>
+                <label class="label">Owner</label>
+                @Html.DropDownListFor(model => model.SelectedOwner, Model.UserOptions, "", new { @style = "width:100%" })
+            </div>
+            <br />
+            
+            <label class="label">Description</label>
+            @Html.TextAreaFor(model => Model.Description, new { @class = "entry-text" })
+            <div class="form-group">
+                <br />
+                <input type="submit" value="Create" class="btn btn-success btn-block" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
+

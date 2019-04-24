@@ -1,0 +1,71 @@
+﻿@model TestingFramework.ViewModels.Scorecard.CategoryTestsViewModel
+
+@{
+    ViewData["Title"] = Model.ScorecardName;
+}
+
+<style>
+    .header-btn{
+        width: 150px;
+    }
+
+    .action-btn{
+        width: 75px;
+    }
+</style>
+
+<h1>@Model.ScorecardName</h1>
+<hr />
+
+<br />
+<br />
+<h3 style="float:left">@Model.CategoryName</h3>
+@Html.ActionLink("Back to Progress", "Progress", new { id = Model.ProgressID }, new { @class = "btn btn-primary", @style = "float:right" })
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Description
+            </th>
+            <th>
+                Expected Result
+            </th>
+            <th>
+                Passed
+            </th>
+            <th>
+                Notes
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.TestResults) {
+        <tr>
+            @{ 
+                var test = Model.Tests.FirstOrDefault(t => t.ID == item.TestID);
+                var notes = "";
+            }
+
+            <td>
+                @Html.DisplayFor(modelItem => test.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => test.ExpectedResult)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Passed)
+            </td>
+            <td>
+                @Html.EditorFor(modelItem => item.Notes)
+            </td>
+            <td>
+                @Html.ActionLink("Fail", "UpdateCategoryTestResult", new { progressID = Model.ProgressID, testID = item.TestID, passed = false, notes = item.Notes },
+                    new { @class = "btn btn-sm btn-danger action-btn" })
+                @Html.ActionLink("Pass", "UpdateCategoryTestResult", new { progressID = Model.ProgressID, testID = item.TestID, passed = true, notes = item.Notes },
+                    new { @class = "btn btn-sm btn-success action-btn" })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

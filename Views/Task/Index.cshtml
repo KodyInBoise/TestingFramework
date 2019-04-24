@@ -1,0 +1,85 @@
+﻿@model TestingFramework.ViewModels.Tasks.TasksHomeViewModel
+
+@{
+    ViewData["Title"] = "Tasks";
+    var defaultTask = Model.OpenTasks.FirstOrDefault();
+}
+
+<style>
+    .action-btn {
+        width: 100px;
+    }
+
+    .header-btn {
+        width: 150px;
+        float: right;
+    }
+</style>
+
+<h1>Tasks</h1>
+<hr />
+<br />
+
+<h3 style="float: left">Open Tasks</h3>
+@Html.ActionLink("Create Task", "Create", new { }, new { @class = "btn btn-success header-btn" })
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => defaultTask.Created)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => defaultTask.Description)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.OpenTasks)
+        {
+            <tr>
+                <td width="20%">
+                    @Html.DisplayFor(modelItem => item.Created)
+                </td>
+                <td width="45%">
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td width="20%">
+                    @Html.ActionLink("Details", "CategoryDetails", new { id = item.ID }, new { @class = "btn btn-sm btn-primary action-btn", @style = "float:right" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<br />
+
+<h3 style="float: left">My Tasks</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => defaultTask.Created)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => defaultTask.Description)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.UserTasks)
+        {
+            <tr>
+                <td width="20%">
+                    @Html.DisplayFor(modelItem => item.Created)
+                </td>
+                <td width="45%">
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td width="20%">
+                    @Html.ActionLink("Details", "CategoryDetails", new { id = item.ID }, new { @class = "btn btn-sm btn-primary action-btn", @style = "float:right" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
