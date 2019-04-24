@@ -41,13 +41,10 @@
             @Html.DisplayFor(model => testCount)
         </dd>
         <dt class="col-sm-2">
-            Total Points
+            Default Test Value
         </dt>
         <dd class="col-sm-10">
-            @{
-                var totalPoints = Model.GetTotalValue();
-            }
-            @Html.DisplayFor(model => totalPoints)
+            @Html.DisplayFor(Model => Model.Scorecard.DefaultTestValue)
         </dd>
     </dl>
     <span style="float:right">

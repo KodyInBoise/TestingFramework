@@ -224,5 +224,27 @@ namespace TestingFramework.Controllers
 
             return RedirectToAction("ScorecardDetails", new { id = scorecardID });
         }
+
+        [HttpGet]
+        public IActionResult EditScorecardDetails(Guid id)
+        {
+            var scorecard = _database.Scorecards.Find(id);
+
+            if (scorecard == null)
+            {
+                return NotFound();
+            }
+
+            return View(scorecard);
+        }
+
+        [HttpPost]
+        public IActionResult EditScorecardDetails(ScorecardModel scorecard)
+        {
+            _database.Scorecards.Update(scorecard);
+            _database.SaveChanges();
+
+            return RedirectToAction("ScorecardDetails", new { id = scorecard.ID });
+        }
     }
 }
