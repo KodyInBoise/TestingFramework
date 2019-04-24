@@ -48,8 +48,9 @@
         </dd>
     </dl>
     <br />
-    @Html.ActionLink("Submit", "SubmitProgress", new { id = Model.Progress.ID }, new { @class = "btn btn-success h3-btn", @style = "float:right" })
-    @Html.ActionLink("Delete", "Delete", new { id = Model.Progress.ID }, new { @class = "btn btn-danger h3-btn", @style = "float:right" })
+    <div class="form-group">
+        @Html.ActionLink("Submit", "SubmitProgress", new { id = Model.Progress.ID }, new { @class = "btn btn-success h3-btn", @style = "float:right" })
+    </div>
 </div>
 <br />
 <hr />

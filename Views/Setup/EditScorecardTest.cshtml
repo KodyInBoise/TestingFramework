@@ -36,8 +36,8 @@
                 <span asp-validation-for="Value" class="text-danger"></span>
             </div>
             <div class="form-group">
-                @Html.ActionLink("Back", "ScorecardDetails", new { id = Model.ID },
-                    new { @class = "btn btn-danger btns", @style="float:left" })
+                @Html.ActionLink("Back", "ScorecardDetails", new { id = Model.ScorecardID },
+                    new { @class = "btn btn-secondary btns", @style="float:left" })
                 <input type="submit" value="Save" class="btn btn-success btns" style="float:right"/>
             </div>
         </form>

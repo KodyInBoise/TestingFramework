@@ -31,7 +31,7 @@ namespace TestingFramework.Controllers
                 CurrentIndex = 0,
                 User = User.Identity.Name
             };
-            
+
             _database.ScorecardsInProgress.Add(progress);
             _database.SaveChanges();
 
@@ -70,7 +70,7 @@ namespace TestingFramework.Controllers
             return View(viewModel);
         }
 
-        [HttpGet] 
+        [HttpGet]
         public IActionResult Delete(Guid id)
         {
             var progress = _database.ScorecardsInProgress.Find(id);
@@ -96,7 +96,7 @@ namespace TestingFramework.Controllers
                 results.Add(new ScorecardTestResultModel
                 {
                     ProgressID = progress.ID,
-                    TestID = t.ID, 
+                    TestID = t.ID,
                     Notes = "",
                     Passed = null
                 });
@@ -138,6 +138,20 @@ namespace TestingFramework.Controllers
             _database.SaveChanges();
 
             return RedirectToAction("CategoryTests", new { id = progressID, categoryID = categoryID });
+        }
+
+        [HttpGet]
+        public IActionResult UpdateTestResult(Guid progressID, Guid testID, bool passed, string notes)
+        {
+            var progress = _database.ScorecardsInProgress.Find(progressID);
+            var categoryID = _database.ScorecardTests.FirstOrDefault(t => t.ID == testID).CategoryID;
+
+            progress.AddOrUpdateResult(testID, categoryID, passed, notes);
+
+            _database.ScorecardsInProgress.Update(progress);
+            _database.SaveChanges();
+
+            return RedirectToAction("EditTestResult", new { id = progressID, testID = testID });
         }
 
         [HttpGet]
@@ -197,7 +211,13 @@ namespace TestingFramework.Controllers
                 };
             }
 
-            return View(result);
+            var viewModel = new EditTestResultViewModel
+            {
+                Test = test,
+                Result = result,
+            };
+
+            return View(viewModel);
         }
     }
 }
