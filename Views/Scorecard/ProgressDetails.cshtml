@@ -52,6 +52,15 @@
             }
             @Html.DisplayFor(model => completedString)
         </dd>
+        <dt class="col-sm-2">
+            Current Score:
+        </dt>
+        <dd class="col-sm-10">
+            @{
+                var score = Model.GetCurrentScore();
+            }
+            @Html.DisplayFor(model => score)
+        </dd>
     </dl>
 </div>
 <hr />

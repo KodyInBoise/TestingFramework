@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using TestingFramework.Extensions;
 using TestingFramework.Models;
 
-namespace TestingFramework.ViewModels
+namespace TestingFramework.ViewModels.Scorecard
 {
     public class ScorecardProgressViewModel
     {
@@ -19,11 +19,13 @@ namespace TestingFramework.ViewModels
             return Categories.FirstOrDefault(c => c.ID == id)?.Name ?? "";
         }
 
-        public string GetTotalCompletedPercent()
+        public string GetCompletedString()
         {
-            var results = Progress.GetResults();
+            var completed = Progress.GetResults().Count();
+            var total = Scorecard.Tests.Count();
+            var percentage = Utils.GetPercentageString(completed, total);
 
-            return Utils.GetPercentageString(results.Count(), Scorecard.Tests.Count());
+            return $"{completed} of {total} - {percentage}";
         }
 
         public string GetTestStatus(Guid testID)
@@ -42,6 +44,14 @@ namespace TestingFramework.ViewModels
             {
                 return "";
             }
+        }
+
+        public string GetCurrentScore()
+        {
+            var passed = Progress.GetResults().Where(r => r.Passed == true).Count();
+            var total = Scorecard.Tests.Count();
+
+            return Utils.GetPercentageString(passed, total);
         }
     }
 }

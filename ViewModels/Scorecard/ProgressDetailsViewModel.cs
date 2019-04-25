@@ -20,5 +20,13 @@ namespace TestingFramework.ViewModels.Scorecard
 
             return $"{completed} of {total} - {percentage}";
         }
+
+        public string GetCurrentScore()
+        {
+            var passed = Progress.GetResults().Where(r => r.Passed == true).Count();
+            var total = Scorecard.Tests.Count();
+
+            return Utils.GetPercentageString(passed, total);
+        }
     }
 }
