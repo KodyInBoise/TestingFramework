@@ -221,6 +221,7 @@ namespace TestingFramework.Controllers
         }
 
         [HttpGet]
+        [Route("Scorecard/ProgressDetails/{id}")]
         public IActionResult ProgressDetails(Guid id)
         {
             var progress = _database.ScorecardsInProgress.Find(id);
@@ -235,7 +236,8 @@ namespace TestingFramework.Controllers
             var viewModel = new ProgressDetailsViewModel
             {
                 Progress = progress,
-                Scorecard = _database.Scorecards.Find(progress.ScorecardID)
+                Scorecard = _database.Scorecards.Find(progress.ScorecardID),
+                ReadOnly = progress.User != User.Identity.Name
             };
 
             return View(viewModel);
