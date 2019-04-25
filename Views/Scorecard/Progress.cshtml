@@ -56,7 +56,7 @@
     <br />
     <div class="form-group">
         @Html.ActionLink("Submit", "SubmitProgress", new { id = Model.Progress.ID }, new { @class = "btn btn-success h3-btn", @style = "float:right" })
-        @Html.ActionLink("Edit Details", "EditDetails", new { id = Model.Progress.ID }, new { @class = "btn btn-secondary h3-btn", @style = "float:right" })
+        @Html.ActionLink("Details", "ProgressDetails", new { id = Model.Progress.ID }, new { @class = "btn btn-primary h3-btn", @style = "float:right" })
     </div>
 </div>
 <br />
@@ -99,7 +99,7 @@
                         @Html.DisplayFor(modelItem => testStatus)
                     </td>
                     <td>
-                        @Html.ActionLink("Edit", "EditTestResult", new { id = Model.Progress.ID, testID = item.ID }, new { @class = "btn btn-primary btn-sm row-btn", @style = "float:right" })
+                        @Html.ActionLink("Edit", "EditTestResult", new { id = Model.Progress.ID, testID = item.ID }, new { @class = "btn btn-secondary btn-sm row-btn", @style = "float:right" })
                     </td>
                 </tr>
             }
