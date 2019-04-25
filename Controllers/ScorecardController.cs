@@ -181,6 +181,28 @@ namespace TestingFramework.Controllers
             return View(viewModel);
         }
 
+
+        [HttpGet]
+        public IActionResult ResultsDetails(Guid id)
+        {
+            var results = _database.ScorecardResults.Find(id);
+            var scorecard = _database.Scorecards.Find(results?.ScorecardID);
+            scorecard.Tests = _database.ScorecardTests.Where(t => t.ScorecardID == scorecard.ID).ToList();
+
+            if (results == null)
+            {
+                return NotFound();
+            }
+
+            var viewModel = new ResultsDetailsViewModel
+            {
+                Results = results,
+                Scorecard = _database.Scorecards.Find(results.ScorecardID)
+            };
+
+            return View(viewModel);
+        }
+
         [HttpGet]
         public IActionResult DeleteResults(Guid id)
         {
