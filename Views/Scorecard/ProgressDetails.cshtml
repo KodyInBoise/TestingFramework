@@ -38,10 +38,16 @@
             @Html.DisplayFor(model => model.Progress.User)
         </dd>
         <dt class="col-sm-2">
+            Started:
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Progress.Started)
+        </dd>
+        <dt class="col-sm-2">
             Tests Completed:
         </dt>
         <dd class="col-sm-10">
-            @{ 
+            @{
                 var completedString = Model.GetTestsCompletedString();
             }
             @Html.DisplayFor(model => completedString)
@@ -57,6 +63,7 @@
             <div asp-validation-summary="All" class="text-danger"></div>
             @Html.HiddenFor(model => Model.Progress.ID)
             @Html.HiddenFor(model => Model.Progress.ScorecardID)
+            @Html.HiddenFor(model => Model.Progress.Started)
             @Html.HiddenFor(model => Model.Progress.CurrentIndex)
             @Html.HiddenFor(model => Model.Progress.ResultsJson)
             @Html.HiddenFor(model => model.Progress.User)
