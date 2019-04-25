@@ -51,4 +51,14 @@ namespace TestingFramework.Extensions
             }
         }
     }
+
+    public class DateTimeRange
+    {
+        public TimeSpan Timespan { get; private set; }
+
+        public DateTimeRange(DateTime start, DateTime end)
+        {
+            Timespan = end.Subtract(start);
+        }
+    }
 }

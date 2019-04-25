@@ -1,0 +1,70 @@
+﻿@model TestingFramework.ViewModels.Scorecard.ResultsDetailsViewModel
+
+@{
+    ViewData["Title"] = "Results";
+}
+
+<h1>Scorecard Results</h1>
+<hr />
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">
+            Name:
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => Model.Scorecard.Name)
+        </dd>
+        <dt class="col-sm-2">
+            Description:
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Scorecard.Description)
+        </dd>
+        <dt class="col-sm-2">
+            User:
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Results.User)
+        </dd>
+        <dt class="col-sm-2">
+            Started:
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Results.StartedTimestamp)
+        </dd>
+        <dt class="col-sm-2">
+            Finished:
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Results.CompletedTimestamp)
+        </dd>
+        <dt class="col-sm-2">
+            Duration:
+        </dt>
+        <dd class="col-sm-10">
+            @{ 
+                var duration = Model.GetDuration();
+            }
+            @Html.DisplayFor(model => duration)
+        </dd>
+        <dt class="col-sm-2">
+            Tests Completed:
+        </dt>
+        <dd class="col-sm-10">
+            @{
+                var completedString = Model.GetTestsCompletedString();
+            }
+            @Html.DisplayFor(model => completedString)
+        </dd>
+        <dt class="col-sm-2">
+            Score:
+        </dt>
+        <dd class="col-sm-10">
+            @{
+                var score = Model.GetCurrentScore();
+            }
+            @Html.DisplayFor(model => score)
+        </dd>
+    </dl>
+</div>

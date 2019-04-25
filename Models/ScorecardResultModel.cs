@@ -16,6 +16,7 @@ namespace TestingFramework.Models
         public string ResultsJson { get; set; }
         public int TotalTestCount { get; set; }
         public DateTime CompletedTimestamp { get; set; }
+        public DateTime StartedTimestamp { get; set; }
 
         public static ScorecardResultModel FromProgress(ScorecardProgressModel progress)
         {
@@ -25,7 +26,8 @@ namespace TestingFramework.Models
                 User = progress.User,
                 ResultsJson = progress.ResultsJson,
                 CompletedTimestamp = DateTime.Now,
-                ScorecardNotes = progress.ScorecardNotes
+                ScorecardNotes = progress.ScorecardNotes,
+                StartedTimestamp = progress.Started,
             };
         }
 

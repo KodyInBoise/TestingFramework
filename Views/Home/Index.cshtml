@@ -1,4 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Identity
+@using TestingFramework.Extensions
+
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
 
@@ -61,7 +63,14 @@
                         @Html.DisplayFor(modelItem => progress)
                     </td>
                     <td>
-                        @Html.ActionLink("Resume", "Progress", "Scorecard", new { id = item.ID }, new { @class = "btn btn-sm btn-primary start-btn", @style = "float:right" })
+                        @if (User.Identity.Name == item.User)
+                        {
+                            @Html.ActionLink("Resume", "Progress", "Scorecard", new { id = item.ID }, new { @class = "btn btn-sm btn-success start-btn", @style = "float:right" })
+                        }
+                        else
+                        {
+                            @Html.ActionLink("Details", "ProgressDetails", "Scorecard", new { id = item.ID }, new { @class = "btn btn-sm btn-primary start-btn", @style = "float:right" })
+                        }
                     </td>
                 </tr>
             }

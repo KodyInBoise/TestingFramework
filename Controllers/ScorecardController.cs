@@ -181,6 +181,28 @@ namespace TestingFramework.Controllers
             return View(viewModel);
         }
 
+
+        [HttpGet]
+        public IActionResult ResultsDetails(Guid id)
+        {
+            var results = _database.ScorecardResults.Find(id);
+            var scorecard = _database.Scorecards.Find(results?.ScorecardID);
+            scorecard.Tests = _database.ScorecardTests.Where(t => t.ScorecardID == scorecard.ID).ToList();
+
+            if (results == null)
+            {
+                return NotFound();
+            }
+
+            var viewModel = new ResultsDetailsViewModel
+            {
+                Results = results,
+                Scorecard = _database.Scorecards.Find(results.ScorecardID)
+            };
+
+            return View(viewModel);
+        }
+
         [HttpGet]
         public IActionResult DeleteResults(Guid id)
         {
@@ -218,6 +240,38 @@ namespace TestingFramework.Controllers
             };
 
             return View(viewModel);
+        }
+
+        [HttpGet]
+        [Route("Scorecard/ProgressDetails/{id}")]
+        public IActionResult ProgressDetails(Guid id)
+        {
+            var progress = _database.ScorecardsInProgress.Find(id);
+            var scorecard = _database.Scorecards.Find(progress?.ScorecardID);
+            scorecard.Tests = _database.ScorecardTests.Where(t => t.ScorecardID == scorecard.ID).ToList();
+
+            if (progress == null || scorecard == null)
+            {
+                return NotFound();
+            } 
+
+            var viewModel = new ProgressDetailsViewModel
+            {
+                Progress = progress,
+                Scorecard = _database.Scorecards.Find(progress.ScorecardID),
+                ReadOnly = progress.User != User.Identity.Name
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public IActionResult ProgressDetails(ProgressDetailsViewModel viewModel)
+        {
+            _database.ScorecardsInProgress.Update(viewModel.Progress);
+            _database.SaveChanges();
+
+            return RedirectToAction("Progress", new { id = viewModel.Progress.ID });
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿@model TestingFramework.ViewModels.ScorecardProgressViewModel
+﻿@model TestingFramework.ViewModels.Scorecard.ScorecardProgressViewModel
 
 @{
     ViewData["Title"] = "Progress";
@@ -38,18 +38,34 @@
             @Html.DisplayFor(model => model.Scorecard.Description)
         </dd>
         <dt class="col-sm-2">
+            Details
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Progress.ScorecardNotes)
+        </dd>
+        <dt class="col-sm-2">
             Completed
         </dt>
         <dd class="col-sm-10">
             @{
-                var completed = Model.GetTotalCompletedPercent();
+                var completed = Model.GetCompletedString();
             }
             @Html.DisplayFor(model => completed)
+        </dd>
+        <dt class="col-sm-2">
+            Current Score
+        </dt>
+        <dd class="col-sm-10">
+            @{
+                var score = Model.GetCurrentScore();
+            }
+            @Html.DisplayFor(model => score)
         </dd>
     </dl>
     <br />
     <div class="form-group">
         @Html.ActionLink("Submit", "SubmitProgress", new { id = Model.Progress.ID }, new { @class = "btn btn-success h3-btn", @style = "float:right" })
+        @Html.ActionLink("Details", "ProgressDetails", new { id = Model.Progress.ID }, new { @class = "btn btn-primary h3-btn", @style = "float:right" })
     </div>
 </div>
 <br />
@@ -92,7 +108,7 @@
                         @Html.DisplayFor(modelItem => testStatus)
                     </td>
                     <td>
-                        @Html.ActionLink("Edit", "EditTestResult", new { id = Model.Progress.ID, testID = item.ID }, new { @class = "btn btn-primary btn-sm row-btn", @style = "float:right" })
+                        @Html.ActionLink("Edit", "EditTestResult", new { id = Model.Progress.ID, testID = item.ID }, new { @class = "btn btn-secondary btn-sm row-btn", @style = "float:right" })
                     </td>
                 </tr>
             }
