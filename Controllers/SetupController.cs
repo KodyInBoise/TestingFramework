@@ -354,5 +354,21 @@ namespace TestingFramework.Controllers
 
             return RedirectToAction("CategoryDetails", new { id = test.CategoryID });
         }
+
+        [HttpGet]
+        public IActionResult DeleteCategory(Guid id)
+        {
+            var category = _database.Categories.Find(id);
+
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            _database.Categories.Remove(category);
+            _database.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
     }
 }
