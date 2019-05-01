@@ -255,10 +255,39 @@ namespace TestingFramework.Controllers
             if (scorecard != null)
             {
                 _database.Scorecards.Remove(scorecard);
+
+                var scorecardTests = _database.ScorecardTests.Where(t => t.ScorecardID == scorecard.ID).ToList();
+                scorecardTests.ForEach(t =>
+                {
+                    _database.ScorecardTests.Remove(t);
+                });
+
                 _database.SaveChanges();
             }
 
             return RedirectToAction("Index");
+        }
+
+        public IActionResult AddAllCategoryTests(Guid id, Guid categoryID)
+        {
+            var scorecard = _database.Scorecards.Find(id);
+            scorecard.Tests = _database.ScorecardTests.Where(t => t.ScorecardID == id).ToList();
+
+            var categoryTests = _database.CategoryTests.Where(t => t.CategoryID == categoryID).ToList();
+
+            foreach (var test in categoryTests.ToList())
+            {
+                var existing = scorecard.Tests.FirstOrDefault(t => t.ID == test.ID);
+                if (existing == null)
+                {
+                    var scorecardTest = ScorecardTestModel.FromCategoryTest(test, scorecard.ID);
+                    _database.ScorecardTests.Add(scorecardTest);
+                }
+            }
+
+            _database.SaveChanges();
+            
+            return RedirectToAction("ScorecardDetails", new { id = id });
         }
     }
 }

@@ -62,7 +62,8 @@
                 new { @class = "dropdown-item dropdown-item-wide"})
         }
     </div>
-    @Html.ActionLink("Add All", "AddScorecardTests", new { }, new { @class="btn btn-success add-btn", @style="float:right" })
+    @Html.ActionLink("Add All", "AddAllCategoryTests", new { id = Model.Scorecard.ID, categoryID = Model.SelectedCategoryID }, 
+            new { @class="btn btn-success add-btn", @style="float:right" })
     <br />
     <br />
     <br />

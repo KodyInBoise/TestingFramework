@@ -10,6 +10,7 @@ namespace TestingFramework.Models
     public class ScorecardTestModel : ITest
     {
         public Guid ID { get; set; }
+        public Guid TestID { get; set; }
         public Guid ScorecardID { get; set; }
         public Guid CategoryID { get; set;}
         public string Description { get; set; }
@@ -23,7 +24,7 @@ namespace TestingFramework.Models
         {
             return new ScorecardTestModel
             {
-                ID = test.ID,
+                TestID = test.ID,
                 ScorecardID = scorecardID,
                 CategoryID = test.CategoryID,
                 Description = test.Description,
