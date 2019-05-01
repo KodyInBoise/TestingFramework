@@ -10,6 +10,31 @@ namespace TestingFramework.Extensions
 {
     public class Utils
     {
+        public class Import
+        {
+            public static List<ImportTestModel> CreateTests(char separator, string text)
+            {
+                var tests = new List<ImportTestModel>();
+                var lines = text.Split(new[] { '\r', '\n' });
+
+                foreach (var line in lines)
+                {
+                    var parts = line.Split(separator);
+                    Double.TryParse(parts[3], out var value);
+
+                    tests.Add(new ImportTestModel
+                    {
+                        CategoryName = parts[0],
+                        Description = parts[1],
+                        ExpectedResult = parts[2],
+                        Value = value
+                    });
+                }
+
+                return tests;
+            }
+        }
+
         public class Admin
         {
             public static void ClearData(ApplicationDbContext db)

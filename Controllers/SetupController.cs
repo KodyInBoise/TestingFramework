@@ -302,5 +302,35 @@ namespace TestingFramework.Controllers
 
             return View(viewModel);
         }
+
+        [HttpPost]
+        public IActionResult ImportTests(ImportTestsViewModel viewModel)
+        {
+            var tests = Utils.Import.CreateTests(viewModel.Separator, viewModel.Text);
+            var allCategories = _database.Categories.ToList();
+
+            tests.ForEach(t =>
+            {
+                var category = allCategories.FirstOrDefault(c => c.Name == t.CategoryName);
+                if (category == null)
+                {
+                    category = new CategoryModel
+                    {
+                        Name = t.CategoryName
+                    };
+
+                    _database.Categories.Add(category);
+                    _database.SaveChanges();
+                }
+
+                t.CategoryID = category.ID;
+
+                _database.CategoryTests.Add(t);
+            });
+
+            _database.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
     }
 }
