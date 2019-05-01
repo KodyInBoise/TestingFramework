@@ -1,0 +1,44 @@
+﻿@model TestingFramework.ViewModels.ImportTestsViewModel
+
+@{
+    ViewData["Title"] = "Import Tests";
+}
+
+<style>
+    .entry-text {
+        width: 100%;
+        height: 250px;
+    }
+
+    .separator-text {
+        text-align: center;
+    }
+    .action-btn {
+        width: 150px;
+    }
+</style>
+
+<h1>Import Tests</h1>
+<hr />
+
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="ImportTests">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @Html.DisplayFor(model => Model.Instructions)
+            <br />
+            <br />
+            <br />
+            <div style="float:right">
+                @Html.LabelFor(model => Model.Separator)
+                @Html.EditorFor(model => Model.Separator, new { @class = "separator-text" })
+            </div>
+            @Html.TextAreaFor(model => Model.Text, new { @class = "entry-text" })
+            <div class="form-group">
+                @Html.ActionLink("Back to Setup", "Index", new { }, new { @class = "btn btn-secondary action-btn", @style = "float:left" })
+                <input type="submit" value="Create" class="btn btn-success action-btn" style="float:right" />
+            </div>
+        </form>
+    </div>
+</div>
+

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using TestingFramework.Data;
+using TestingFramework.Extensions;
 using TestingFramework.Models;
 using TestingFramework.ViewModels;
 using TestingFramework.ViewModels.Scorecard;

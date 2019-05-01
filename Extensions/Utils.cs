@@ -3,12 +3,92 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using TestingFramework.Data;
 using TestingFramework.Models;
 
 namespace TestingFramework.Extensions
 {
     public class Utils
     {
+        public class Admin
+        {
+            public static void ClearData(ApplicationDbContext db)
+            {
+                ClearScorecards(db);
+                ClearScorecardTests(db);
+                ClearScorecardsInProgress(db);
+                ClearResults(db);
+                ClearCategories(db);
+                ClearCategoryTests(db);
+            }
+
+            static void ClearScorecards(ApplicationDbContext db)
+            {
+                var scorecards = db.Scorecards.ToList();
+                scorecards.ForEach(x =>
+                {
+                    db.Scorecards.Remove(x);
+                });
+
+                db.SaveChanges();
+            }
+
+            static void ClearScorecardTests(ApplicationDbContext db)
+            {
+                var tests = db.ScorecardTests.ToList();
+                tests.ForEach(x =>
+                {
+                    db.ScorecardTests.Remove(x);
+                });
+
+                db.SaveChanges();
+            }
+
+            static void ClearResults(ApplicationDbContext db)
+            {
+                var results = db.ScorecardResults.ToList();
+                results.ForEach(x =>
+                {
+                    db.ScorecardResults.Remove(x);
+                });
+
+                db.SaveChanges();
+            }
+
+            static void ClearScorecardsInProgress(ApplicationDbContext db)
+            {
+                var progresses = db.ScorecardsInProgress.ToList();
+                progresses.ForEach(x =>
+                {
+                    db.ScorecardsInProgress.Remove(x);
+                });
+
+                db.SaveChanges();
+            }
+
+            static void ClearCategories(ApplicationDbContext db)
+            {
+                var categories = db.Categories.ToList();
+                categories.ForEach(x =>
+                {
+                    db.Categories.Remove(x);
+                });
+
+                db.SaveChanges();
+            }
+
+            static void ClearCategoryTests(ApplicationDbContext db)
+            {
+                var tests = db.CategoryTests.ToList();
+                tests.ForEach(x =>
+                {
+                    db.CategoryTests.Remove(x);
+                });
+
+                db.SaveChanges();
+            }
+        }
+
         public static Guid GetUserID(ClaimsPrincipal user)
         {
             return Guid.Parse(user.FindFirst(ClaimTypes.NameIdentifier).Value);

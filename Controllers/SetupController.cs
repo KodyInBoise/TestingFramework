@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using TestingFramework.Data;
+using TestingFramework.Extensions;
 using TestingFramework.Models;
 using TestingFramework.ViewModels;
 
@@ -288,6 +289,18 @@ namespace TestingFramework.Controllers
             _database.SaveChanges();
             
             return RedirectToAction("ScorecardDetails", new { id = id });
+        }
+
+        [HttpGet]
+        public IActionResult ImportTests()
+        {
+            var viewModel = new ImportTestsViewModel
+            {
+                Instructions = Strings.ImportTests,
+                Separator = ','
+            };
+
+            return View(viewModel);
         }
     }
 }
