@@ -96,7 +96,7 @@ namespace TestingFramework.Controllers
                 results.Add(new ScorecardTestResultModel
                 {
                     ProgressID = progress.ID,
-                    TestID = t.TestID,
+                    TestID = t.ID,
                     Notes = "",
                     Passed = null
                 });
@@ -174,7 +174,7 @@ namespace TestingFramework.Controllers
         {
             var viewModel = new ResultsViewModel
             {
-                Results = _database.ScorecardResults.ToList(),
+                Results = _database.ScorecardResults.ToList().OrderBy(r => r.CompletedTimestamp).Reverse(),
                 Scorecards = _database.Scorecards.ToList()
             };
 
