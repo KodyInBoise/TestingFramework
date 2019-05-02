@@ -37,14 +37,17 @@
             @Html.DisplayFor(model => testCount)
         </dd>
     </dl>
+    <br />
     <div>
-        @Html.ActionLink("Delete", "DeleteCategory", new { id = Model.Category.ID }, new { @class = "btn btn-danger btn-sm edit-btn", @style = "float:left" })
+        @Html.ActionLink("Back", "Index", new { }, new { @class = "btn btn-secondary btn-sm edit-btn", @style = "float:left" })
     </div>
     <div style="float:right">
-        @Html.ActionLink("Edit Details", "EditCategoryDetails", new { id = Model.Category.ID }, new { @class = "btn btn-secondary btn-sm edit-btn" })
+        @Html.ActionLink("Delete", "DeleteCategory", new { id = Model.Category.ID }, new { @class = "btn btn-danger btn-sm edit-btn" })
+        @Html.ActionLink("Edit Details", "EditCategoryDetails", new { id = Model.Category.ID }, new { @class = "btn btn-primary btn-sm edit-btn" })
         @Html.ActionLink("Create Test", "CreateCategoryTest", new { id = Model.Category.ID }, new { @class = "btn btn-success btn-sm edit-btn" })
     </div>
     <br />
+    <hr />
     <br />
     <br />
     <br />
