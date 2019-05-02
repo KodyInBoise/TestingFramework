@@ -96,7 +96,7 @@ namespace TestingFramework.Controllers
                 results.Add(new ScorecardTestResultModel
                 {
                     ProgressID = progress.ID,
-                    TestID = t.ID,
+                    TestID = t.TestID,
                     Notes = "",
                     Passed = null
                 });
@@ -183,6 +183,7 @@ namespace TestingFramework.Controllers
 
 
         [HttpGet]
+        [Route("Scorecard/Results/{id}")]
         public IActionResult ResultsDetails(Guid id)
         {
             var results = _database.ScorecardResults.Find(id);
