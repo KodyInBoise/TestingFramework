@@ -33,16 +33,8 @@ namespace TestingFramework.ViewModels.Scorecard
         public string GetDuration()
         {
             var range = new DateTimeRange(Results.StartedTimestamp, Results.CompletedTimestamp);
-            var durationString = "";
 
-            if (range.Timespan.Days > 0)
-            {
-                durationString += $"{range.Timespan.Days} Days, ";
-            }
-
-            durationString += $"{range.Timespan.Hours} Hours, {range.Timespan.Minutes} Minutes";
-
-            return durationString;
+            return Utils.GetTimespanString(range.Timespan);
         }
 
         public ScorecardTestModel GetScorecardTest(Guid testID)

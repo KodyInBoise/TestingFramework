@@ -155,6 +155,20 @@ namespace TestingFramework.Extensions
                 return "0%";
             }
         }
+
+        public static string GetTimespanString(TimeSpan timespan)
+        {
+            var timespanString = "";
+
+            if (timespan.Days > 0)
+            {
+                timespanString += $"{timespan.Days} Days, ";
+            }
+
+            timespanString += $"{timespan.Hours} Hours, {timespan.Minutes} Minutes";
+
+            return timespanString;
+        }
     }
 
     public class DateTimeRange
