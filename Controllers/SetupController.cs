@@ -370,5 +370,27 @@ namespace TestingFramework.Controllers
 
             return RedirectToAction("Index");
         }
+
+        [HttpGet]
+        public IActionResult EditCategoryDetails(Guid id)
+        {
+            var category = _database.Categories.Find(id);
+
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            return View(category);
+        }
+
+        [HttpPost]
+        public IActionResult EditCategoryDetails(CategoryModel category)
+        {
+            _database.Categories.Update(category);
+            _database.SaveChanges();
+
+            return RedirectToAction("CategoryDetails", new { id = category.ID });
+        }
     }
 }
