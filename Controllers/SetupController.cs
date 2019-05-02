@@ -311,7 +311,7 @@ namespace TestingFramework.Controllers
 
             tests.ForEach(t =>
             {
-                var category = allCategories.FirstOrDefault(c => c.Name == t.CategoryName);
+                var category = _database.Categories.FirstOrDefault(c => c.Name == t.CategoryName);
                 if (category == null)
                 {
                     category = new CategoryModel

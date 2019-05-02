@@ -19,16 +19,20 @@ namespace TestingFramework.Extensions
 
                 foreach (var line in lines)
                 {
-                    var parts = line.Split(separator);
-                    Double.TryParse(parts[3], out var value);
-
-                    tests.Add(new ImportTestModel
+                    try
                     {
-                        CategoryName = parts[0],
-                        Description = parts[1],
-                        ExpectedResult = parts[2],
-                        Value = value
-                    });
+                        var parts = line.Split(separator);
+                        Double.TryParse(parts[3], out var value);
+
+                        tests.Add(new ImportTestModel
+                        {
+                            CategoryName = parts[0],
+                            Description = parts[1],
+                            ExpectedResult = parts[2],
+                            Value = value
+                        });
+                    }
+                    catch { /* Need error logging here */ }
                 }
 
                 return tests;
