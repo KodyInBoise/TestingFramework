@@ -172,10 +172,17 @@ namespace TestingFramework.Controllers
         [HttpGet]
         public IActionResult Results()
         {
+            var scorecards = _database.Scorecards.ToList();
+            scorecards.ForEach(s =>
+            {
+                s.Tests = _database.ScorecardTests.Where(t => t.ScorecardID == s.ID).ToList();
+            });
+
             var viewModel = new ResultsViewModel
             {
                 Results = _database.ScorecardResults.ToList().OrderBy(r => r.CompletedTimestamp).Reverse(),
-                Scorecards = _database.Scorecards.ToList()
+                ScorecardsInProgress = _database.ScorecardsInProgress.ToList(),
+                Scorecards = scorecards
             };
 
             return View(viewModel);

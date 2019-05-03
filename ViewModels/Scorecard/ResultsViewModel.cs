@@ -11,6 +11,7 @@ namespace TestingFramework.ViewModels.Scorecard
     {
         public IEnumerable<ScorecardResultModel> Results { get; set; }
         public IEnumerable<ScorecardModel> Scorecards { get; set; }
+        public IEnumerable<ScorecardProgressModel> ScorecardsInProgress { get; set; }
 
 
         public string GetScorecardName(Guid id)
@@ -25,6 +26,14 @@ namespace TestingFramework.ViewModels.Scorecard
             var passed = results.GetTestResults().Where(r => r.Passed == true);
 
             return Utils.GetPercentageString(passed.Count(), results.TotalTestCount);
+        }
+
+        public string GetProgress(Guid id)
+        {
+            var progress = ScorecardsInProgress.FirstOrDefault(p => p.ID == id);
+            var scorecard = Scorecards.FirstOrDefault(s => s.ID == progress.ScorecardID);
+
+            return Utils.GetPercentageString(progress.GetResults().Count(), scorecard.Tests.Count());
         }
     }
 }

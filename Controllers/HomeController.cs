@@ -27,7 +27,8 @@ namespace TestingFramework.Controllers
             {
                 Scorecards = _database.Scorecards.ToList(),
                 ScorecardsInProgress = _database.ScorecardsInProgress.ToList(),
-                ScorecardTests = _database.ScorecardTests.ToList()
+                ScorecardTests = _database.ScorecardTests.ToList(),
+                UserTasks = _database.Tasks.Where(t => t.Owner == Utils.GetUserID(User))
             };
 
             foreach(var scorecard in viewModel.Scorecards)
@@ -59,6 +60,12 @@ namespace TestingFramework.Controllers
         public IActionResult Results()
         {
             return RedirectToAction("Results", "Scorecard");
+        }
+
+        [HttpGet]
+        public IActionResult TaskDetails(Guid id)
+        {
+            return RedirectToAction("Details", "Task", new { id = id });
         }
     }
 }

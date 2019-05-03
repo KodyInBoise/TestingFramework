@@ -49,6 +49,7 @@ namespace TestingFramework.Extensions
                 ClearResults(db);
                 ClearCategories(db);
                 ClearCategoryTests(db);
+                ClearTasks(db);
             }
 
             static void ClearScorecards(ApplicationDbContext db)
@@ -112,6 +113,17 @@ namespace TestingFramework.Extensions
                 tests.ForEach(x =>
                 {
                     db.CategoryTests.Remove(x);
+                });
+
+                db.SaveChanges();
+            }
+
+            static void ClearTasks(ApplicationDbContext db)
+            {
+                var tasks = db.Tasks.ToList();
+                tasks.ForEach(x =>
+                {
+                    db.Tasks.Remove(x);
                 });
 
                 db.SaveChanges();

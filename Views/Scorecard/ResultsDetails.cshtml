@@ -92,10 +92,10 @@
             {
                 var test = Model.GetScorecardTest(item.TestID);
                 <tr>
-                    <td width="20%">
+                    <td width="40%">
                         @Html.DisplayFor(modelItem => test.Description)
                     </td>
-                    <td width="60%">
+                    <td width="40%">
                         @Html.DisplayFor(modelItem => test.ExpectedResult)
                     </td>
                     <td width="20%">
@@ -115,13 +115,13 @@
         }
         <thead>
             <tr>
-                <th>
+                <th width="40%">
                     Description
                 </th>
-                <th>
+                <th width="40%">
                     Expected Result
                 </th>
-                <th>
+                <th width="40%">
                     Notes
                 </th>
             </tr>
@@ -131,13 +131,13 @@
             {
                 var test = Model.GetScorecardTest(item.TestID);
                 <tr>
-                    <td width="20%">
+                    <td>
                         @Html.DisplayFor(modelItem => test.Description)
                     </td>
-                    <td width="60%">
+                    <td>
                         @Html.DisplayFor(modelItem => test.ExpectedResult)
                     </td>
-                    <td width="20%">
+                    <td>
                         @Html.DisplayFor(modelItem => item.Notes)
                     </td>
                 </tr>
