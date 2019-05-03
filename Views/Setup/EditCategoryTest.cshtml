@@ -1,4 +1,4 @@
-﻿@model TestingFramework.Models.CategoryTestModel
+﻿@model TestingFramework.ViewModels.Setup.EditCategoryTestViewModel
 
 @{
     ViewData["Title"] = "Edit Test";
@@ -7,6 +7,10 @@
 <style>
     .action-btn {
         width: 100px;
+    }
+
+    .btn-border {
+        border: medium;
     }
 </style>
 
@@ -17,25 +21,30 @@
     <div class="col-md-6">
         <form asp-action="EditCategoryTest">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            @Html.HiddenFor(model => Model.ID)
-            @Html.HiddenFor(model => Model.CategoryID)
+            @Html.HiddenFor(model => Model.Test.ID)
+            @Html.HiddenFor(model => Model.Test.CategoryID)
             <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
+                <label class="control-label">Category</label>
+                @Html.DropDownListFor(model => model.SelectedCategoryID, Model.CategoriesList, new { @class = "form-control btn btn-outline-dark dropdown-toggle" })
+                <span asp-validation-for="SelectedCategoryID" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ExpectedResult" class="control-label">Expected Result</label>
-                <input asp-for="ExpectedResult" class="form-control" />
-                <span asp-validation-for="ExpectedResult" class="text-danger"></span>
+                <label asp-for="Test.Description" class="control-label"></label>
+                <input asp-for="Test.Description" class="form-control" />
+                <span asp-validation-for="Test.Description" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Value" class="control-label"></label>
-                <input asp-for="Value" class="form-control" />
-                <span asp-validation-for="Value" class="text-danger"></span>
+                <label asp-for="Test.ExpectedResult" class="control-label">Expected Result</label>
+                <input asp-for="Test.ExpectedResult" class="form-control" />
+                <span asp-validation-for="Test.ExpectedResult" class="text-danger"></span>
             </div>
             <div class="form-group">
-                @Html.ActionLink("Back", "CategoryDetails", new { id = Model.CategoryID }, new { @class = "btn btn-secondary action-btn", @style = "float:left" })
+                <label asp-for="Test.Value" class="control-label"></label>
+                <input asp-for="Test.Value" class="form-control" />
+                <span asp-validation-for="Test.Value" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                @Html.ActionLink("Back", "CategoryDetails", new { id = Model.Test.CategoryID }, new { @class = "btn btn-secondary action-btn", @style = "float:left" })
                 <input type="submit" value="Save" class="btn btn-success action-btn" style="float:right" />
             </div>
         </form>

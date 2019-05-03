@@ -72,20 +72,17 @@
             @foreach (var item in Model.Tests)
             {
                 <tr>
-                    <td width="20%">
+                    <td width="45%">
                         @Html.DisplayFor(modelItem => item.Description)
                     </td>
-                    <td width="60%">
+                    <td width="45%">
                         @Html.DisplayFor(modelItem => item.ExpectedResult)
                     </td>
-                    <td width="20%">
+                    <td width="10%">
                         @Html.ActionLink("Edit", "EditCategoryTest", new { id = item.ID }, new { @class = "btn btn-primary btn-sm edit-btn", @style = "float:right" })
                     </td>
                 </tr>
             }
         </tbody>
     </table>
-</div>
-<div>
-    <a asp-action="Index">Back to Setup</a>
 </div>

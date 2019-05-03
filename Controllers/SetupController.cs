@@ -8,6 +8,7 @@ using TestingFramework.Data;
 using TestingFramework.Extensions;
 using TestingFramework.Models;
 using TestingFramework.ViewModels;
+using TestingFramework.ViewModels.Setup;
 
 namespace TestingFramework.Controllers
 {
@@ -337,22 +338,34 @@ namespace TestingFramework.Controllers
         public IActionResult EditCategoryTest(Guid id)
         {
             var test = _database.CategoryTests.Find(id);
+            var categories = _database.Categories.ToList();
 
             if (test == null)
             {
                 return NotFound();
             }
 
-            return View(test);
+            var viewModel = new EditCategoryTestViewModel
+            {
+                SelectedCategoryID = test.CategoryID,
+                CategoriesList = new SelectList(categories, "ID", "Name"),
+                Test = test,
+            };
+
+            return View(viewModel);
         }
 
         [HttpPost]
-        public IActionResult EditCategoryTest(CategoryTestModel test)
+        public IActionResult EditCategoryTest(EditCategoryTestViewModel viewModel)
         {
-            _database.CategoryTests.Update(test);
+            var originalCategoryID = viewModel.Test.CategoryID;
+
+            viewModel.Test.CategoryID = viewModel.SelectedCategoryID;
+
+            _database.CategoryTests.Update(viewModel.Test);
             _database.SaveChanges();
 
-            return RedirectToAction("CategoryDetails", new { id = test.CategoryID });
+            return RedirectToAction("CategoryDetails", new { id = originalCategoryID });
         }
 
         [HttpGet]
