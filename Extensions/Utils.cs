@@ -135,14 +135,9 @@ namespace TestingFramework.Extensions
             return Guid.Parse(user.FindFirst(ClaimTypes.NameIdentifier).Value);
         }
 
-        public static bool ValidateGuid(Guid guid)
+        public static bool ValidateGuid(Guid? guid)
         {
-            if (guid == default(Guid))
-            {
-                return false;
-            }
-
-            return true;
+            return guid != null && guid != default(Guid);
         }
 
         public static string GetPercentageString(double value, double total, int places = 2)

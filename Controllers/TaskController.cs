@@ -25,7 +25,7 @@ namespace TestingFramework.Controllers
         {
             var viewModel = new TasksHomeViewModel
             {
-                OpenTasks = _database.Tasks.Where(t => t.Status == Strings.Status.Open),
+                OpenTasks = _database.Tasks.Where(t => t.Owner == null || t.Owner == default(Guid)),
                 UserTasks = _database.Tasks.Where(t => t.Owner == Utils.GetUserID(User))
             };
 
@@ -69,7 +69,42 @@ namespace TestingFramework.Controllers
             if (task == null)
                 return NotFound();
 
-            return View(task);
+            var statusOptions = new List<string>()
+            {
+                Strings.Status.Open,
+                Strings.Status.Closed,
+                Strings.Status.InProgress
+            };
+
+            var owner = _database.AspNetUsers.FirstOrDefault(u => u.Id == task.Owner.ToString());
+            var users = _database.AspNetUsers.ToList();
+            
+            if (owner != null)
+            {
+                users.Remove(owner);
+            }
+
+            var viewModel = new TaskDetailsViewModel
+            {
+                Task = task,
+                StatusOptions = new SelectList(statusOptions),
+                UserOptions = new SelectList(users, "Id", "UserName"),
+                OwnerName = owner?.UserName ?? ""
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public IActionResult Details(TaskDetailsViewModel viewModel)
+        {
+            if (viewModel.Task.Status == Strings.Status.Closed)
+                viewModel.Task.Completed = DateTime.Now;
+
+            _database.Tasks.Update(viewModel.Task);
+            _database.SaveChanges();
+
+            return RedirectToAction("Details", new { id = viewModel.Task.ID });
         }
     }
 }
