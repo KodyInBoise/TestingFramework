@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TestingFramework.Extensions;
 
 namespace TestingFramework.Models.Tasks
 {
@@ -12,7 +13,12 @@ namespace TestingFramework.Models.Tasks
         public string CreatedBy { get; set; }
         public Guid Owner { get; set; }
         public string Description { get; set; }
-        public bool Open { get; set; }
+        public string Status { get; set; }
         public DateTime Completed { get; set; }
+
+        //public bool IsClosed()
+        //{
+        //    return Status == Strings.Status.Closed;
+        //}
     }
 }

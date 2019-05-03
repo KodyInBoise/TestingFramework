@@ -25,7 +25,7 @@ namespace TestingFramework.Controllers
         {
             var viewModel = new TasksHomeViewModel
             {
-                OpenTasks = _database.Tasks.Where(t => t.Open == true),
+                OpenTasks = _database.Tasks.Where(t => t.Status == Strings.Status.Open),
                 UserTasks = _database.Tasks.Where(t => t.Owner == Utils.GetUserID(User))
             };
 
@@ -50,7 +50,7 @@ namespace TestingFramework.Controllers
             {
                 Created = DateTime.Now,
                 CreatedBy = User.Identity.Name,
-                Open = true,
+                Status = Strings.Status.Open,
                 Description = viewModel.Description,
                 Owner = viewModel.SelectedOwner
             };
@@ -59,6 +59,17 @@ namespace TestingFramework.Controllers
             _database.SaveChanges();
 
             return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public IActionResult Details(Guid id)
+        {
+            var task = _database.Tasks.Find(id);
+
+            if (task == null)
+                return NotFound();
+
+            return View(task);
         }
     }
 }
