@@ -132,7 +132,15 @@ namespace TestingFramework.Extensions
 
         public static Guid GetUserID(ClaimsPrincipal user)
         {
-            return Guid.Parse(user.FindFirst(ClaimTypes.NameIdentifier).Value);
+            try
+            {
+                return Guid.Parse(user.FindFirst(ClaimTypes.NameIdentifier).Value);           
+            }
+            catch (Exception ex)
+            {
+                // TODO: Add logging
+                return default(Guid);
+            }
         }
 
         public static bool ValidateGuid(Guid? guid)

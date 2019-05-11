@@ -10,7 +10,7 @@
     }
 
     .desc-text {
-        width: 250px;
+        width: 400px;
         height: 125px;
     }
 
@@ -62,6 +62,12 @@
                     @Html.DropDownListFor(model => model.Task.Owner, Model.UserOptions, "", new { @class = "status-dropdown" })
                 </dd>
             }
+            <dt class="col-sm-2">
+                <bold>Status</bold>
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DropDownListFor(model => model.Task.Status, Model.StatusOptions, new { @class = "status-dropdown" })
+            </dd>
         </dl>
         <br />
         <dl class="row">
@@ -70,12 +76,6 @@
             </dt>
             <dd class="col-sm-10">
                 @Html.TextAreaFor(model => model.Task.Description, new { @class = "desc-text" })
-            </dd>
-            <dt class="col-sm-2">
-                <bold>Status</bold>
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DropDownListFor(model => model.Task.Status, Model.StatusOptions, new { @class = "status-dropdown" })
             </dd>
             @if (Model.IsClosed())
             {
@@ -89,8 +89,10 @@
         </dl>
     </div>
 
-    <div>
+    <div class="col-md-7">
         @Html.ActionLink("Back", "Index", new { }, new { @class = "btn btn-secondary btn-sm top-btn", @style = "float:left" })
         <input type="submit" value="Update" class="btn btn-sm btn-success top-btn" style="float:right" />
     </div>
 </form>
+<br />
+<hr />
