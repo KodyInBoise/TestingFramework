@@ -25,8 +25,8 @@ namespace TestingFramework.Controllers
         {
             var viewModel = new TasksHomeViewModel
             {
-                OpenTasks = _database.Tasks.Where(t => t.Owner == null || t.Owner == default(Guid)),
-                UserTasks = _database.Tasks.Where(t => t.Owner == Utils.GetUserID(User))
+                AvailableTasks = _database.Tasks.Where(t => t.Owner == null || t.Owner == default(Guid)),
+                UserTasks = _database.Tasks.Where(t => t.Owner == Utils.GetUserID(User) && t.Status == Strings.Status.Open)
             };
 
             return View(viewModel);

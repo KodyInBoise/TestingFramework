@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = "Tasks";
-    var defaultTask = Model.OpenTasks.FirstOrDefault();
+    var defaultTask = Model.AvailableTasks.FirstOrDefault();
 }
 
 <style>
@@ -20,7 +20,7 @@
 <hr />
 <br />
 
-<h3 style="float: left">Open Tasks</h3>
+<h3 style="float: left">Available Tasks</h3>
 @Html.ActionLink("Create Task", "Create", new { }, new { @class = "btn btn-success header-btn" })
 <table class="table">
     <thead>
@@ -35,7 +35,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.OpenTasks)
+        @foreach (var item in Model.AvailableTasks)
         {
             <tr>
                 <td width="20%">
