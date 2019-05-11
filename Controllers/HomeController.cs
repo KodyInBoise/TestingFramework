@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using TestingFramework.Data;
+using TestingFramework.Extensions;
 using TestingFramework.Models;
 using TestingFramework.ViewModels;
 using TestingFramework.ViewModels.Scorecard;
@@ -26,7 +27,8 @@ namespace TestingFramework.Controllers
             {
                 Scorecards = _database.Scorecards.ToList(),
                 ScorecardsInProgress = _database.ScorecardsInProgress.ToList(),
-                ScorecardTests = _database.ScorecardTests.ToList()
+                ScorecardTests = _database.ScorecardTests.ToList(),
+                UserTasks = _database.Tasks.Where(t => t.Owner == Utils.GetUserID(User) && t.Status == Strings.Status.Open)
             };
 
             foreach(var scorecard in viewModel.Scorecards)
@@ -58,6 +60,12 @@ namespace TestingFramework.Controllers
         public IActionResult Results()
         {
             return RedirectToAction("Results", "Scorecard");
+        }
+
+        [HttpGet]
+        public IActionResult TaskDetails(Guid id)
+        {
+            return RedirectToAction("Details", "Task", new { id = id });
         }
     }
 }

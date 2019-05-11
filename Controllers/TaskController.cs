@@ -25,8 +25,8 @@ namespace TestingFramework.Controllers
         {
             var viewModel = new TasksHomeViewModel
             {
-                OpenTasks = _database.Tasks.Where(t => t.Open == true),
-                UserTasks = _database.Tasks.Where(t => t.Owner == Utils.GetUserID(User))
+                AvailableTasks = _database.Tasks.Where(t => t.Owner == null || t.Owner == default(Guid)),
+                UserTasks = _database.Tasks.Where(t => t.Owner == Utils.GetUserID(User) && t.Status == Strings.Status.Open)
             };
 
             return View(viewModel);
@@ -50,7 +50,7 @@ namespace TestingFramework.Controllers
             {
                 Created = DateTime.Now,
                 CreatedBy = User.Identity.Name,
-                Open = true,
+                Status = Strings.Status.Open,
                 Description = viewModel.Description,
                 Owner = viewModel.SelectedOwner
             };
@@ -59,6 +59,52 @@ namespace TestingFramework.Controllers
             _database.SaveChanges();
 
             return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public IActionResult Details(Guid id)
+        {
+            var task = _database.Tasks.Find(id);
+
+            if (task == null)
+                return NotFound();
+
+            var statusOptions = new List<string>()
+            {
+                Strings.Status.Open,
+                Strings.Status.Closed,
+                Strings.Status.InProgress
+            };
+
+            var owner = _database.AspNetUsers.FirstOrDefault(u => u.Id == task.Owner.ToString());
+            var users = _database.AspNetUsers.ToList();
+            
+            if (owner != null)
+            {
+                users.Remove(owner);
+            }
+
+            var viewModel = new TaskDetailsViewModel
+            {
+                Task = task,
+                StatusOptions = new SelectList(statusOptions),
+                UserOptions = new SelectList(users, "Id", "UserName"),
+                OwnerName = owner?.UserName ?? ""
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public IActionResult Details(TaskDetailsViewModel viewModel)
+        {
+            if (viewModel.Task.Status == Strings.Status.Closed)
+                viewModel.Task.Completed = DateTime.Now;
+
+            _database.Tasks.Update(viewModel.Task);
+            _database.SaveChanges();
+
+            return RedirectToAction("Details", new { id = viewModel.Task.ID });
         }
     }
 }

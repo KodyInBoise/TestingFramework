@@ -9,9 +9,14 @@
 
 @{
     ViewData["Title"] = "Quality Center";
+    var defaultTask = Model.UserTasks.FirstOrDefault();
 }
 
 <style>
+    .action-btn {
+        width: 100px;
+    }
+
     .start-btn {
         width: 150px;
     }
@@ -24,62 +29,40 @@
 
 @if (SignInManager.IsSignedIn(User))
 {
-    <h3 style="float: left">Scorecards In Progress</h3>
+    <h3 style="float: left">My Tasks</h3>
     <table class="table">
         <thead>
             <tr>
-                <th width="20%">
-                    Started
+                <th>
+                    @Html.DisplayNameFor(model => defaultTask.Created)
                 </th>
-                <th width="25%">
-                    Scorecard
-                </th>
-                <th width="25%">
-                    User
-                </th>
-                <th width="10%">
-                    Completed
+                <th>
+                    @Html.DisplayNameFor(model => defaultTask.Description)
                 </th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model.ScorecardsInProgress)
+            @foreach (var item in Model.UserTasks)
             {
-                var scorecardName = Model.Scorecards.FirstOrDefault(sc => sc.ID == item.ScorecardID).Name;
-                var progress = Model.GetProgress(item.ID);
-
                 <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Started)
+                    <td width="20%">
+                        @Html.DisplayFor(modelItem => item.Created)
                     </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => scorecardName)
+                    <td width="45%">
+                        @Html.DisplayFor(modelItem => item.Description)
                     </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.User)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => progress)
-                    </td>
-                    <td>
-                        @if (User.Identity.Name == item.User)
-                        {
-                            @Html.ActionLink("Resume", "Progress", "Scorecard", new { id = item.ID }, new { @class = "btn btn-sm btn-success start-btn", @style = "float:right" })
-                        }
-                        else
-                        {
-                            @Html.ActionLink("Details", "ProgressDetails", "Scorecard", new { id = item.ID }, new { @class = "btn btn-sm btn-primary start-btn", @style = "float:right" })
-                        }
+                    <td width="20%">
+                        @Html.ActionLink("Details", "TaskDetails", new { id = item.ID }, new { @class = "btn btn-sm btn-primary action-btn", @style = "float:right" })
                     </td>
                 </tr>
             }
         </tbody>
     </table>
+    <br />
+    <br />
 
-    <br />
-    <br />
-    <h3 style="float: left">All Scorecards</h3>
+    <h3 style="float: left">Scorecards</h3>
     <table class="table">
         <thead>
             <tr>

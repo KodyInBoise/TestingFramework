@@ -12,18 +12,28 @@
         width: 100px;
     }
 
-    .header-btn {
+    .create-btn {
         width: 150px;
         float: right;
+    }
+    
+    .header-btn {
+        width: 150px;
     }
 </style>
 
 <h1>Setup</h1>
 <hr />
+<div>
+    @Html.ActionLink("Import CSV", "ImportTests", new { }, new { @class = "btn btn-primary create-btn", @style = "float:right" })
+</div>
+<br />
+<br />
+<br />
 <br />
 
 <h3 style="float: left">Categories</h3>
-@Html.ActionLink("Create Category", "CreateCategory", new { }, new { @class = "btn btn-success header-btn" })
+@Html.ActionLink("Create Category", "CreateCategory", new { }, new { @class = "btn btn-success create-btn" })
 <table class="table">
     <thead>
         <tr>
@@ -66,7 +76,7 @@
 <br />
 
 <h3 style="float: left">Scorecards</h3>
-@Html.ActionLink("Create Scorecard", "CreateScorecard", new { }, new { @class = "btn btn-success header-btn" })
+@Html.ActionLink("Create Scorecard", "CreateScorecard", new { }, new { @class = "btn btn-success create-btn" })
 <table class="table">
     <thead>
         <tr>

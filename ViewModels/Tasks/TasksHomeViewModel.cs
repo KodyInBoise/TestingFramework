@@ -8,7 +8,7 @@ namespace TestingFramework.ViewModels.Tasks
 {
     public class TasksHomeViewModel
     {
-        public IEnumerable<TaskModel> OpenTasks { get; set; }
+        public IEnumerable<TaskModel> AvailableTasks { get; set; }
         public IEnumerable<TaskModel> UserTasks { get; set; }
     }
 }

@@ -14,6 +14,7 @@ namespace TestingFramework.ViewModels.Scorecard
 
         public string GetTestsCompletedString()
         {
+            var t = Results.GetTestResults();
             var completed = Results.GetTestResults().Count();
             var total = Scorecard.Tests.Count();
             var percentage = Utils.GetPercentageString(completed, total);
@@ -33,7 +34,12 @@ namespace TestingFramework.ViewModels.Scorecard
         {
             var range = new DateTimeRange(Results.StartedTimestamp, Results.CompletedTimestamp);
 
-            return range.Timespan.ToString();
+            return Utils.GetTimespanString(range.Timespan);
+        }
+
+        public ScorecardTestModel GetScorecardTest(Guid testID)
+        {
+            return Scorecard.Tests.FirstOrDefault(t => t.ID == testID);
         }
     }
 }

@@ -5,8 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using TestingFramework.Data;
+using TestingFramework.Extensions;
 using TestingFramework.Models;
 using TestingFramework.ViewModels;
+using TestingFramework.ViewModels.Setup;
 
 namespace TestingFramework.Controllers
 {
@@ -255,10 +257,153 @@ namespace TestingFramework.Controllers
             if (scorecard != null)
             {
                 _database.Scorecards.Remove(scorecard);
+
+                var scorecardTests = _database.ScorecardTests.Where(t => t.ScorecardID == scorecard.ID).ToList();
+                scorecardTests.ForEach(t =>
+                {
+                    _database.ScorecardTests.Remove(t);
+                });
+
                 _database.SaveChanges();
             }
 
             return RedirectToAction("Index");
+        }
+
+        public IActionResult AddAllCategoryTests(Guid id, Guid categoryID)
+        {
+            var scorecard = _database.Scorecards.Find(id);
+            scorecard.Tests = _database.ScorecardTests.Where(t => t.ScorecardID == id).ToList();
+
+            var categoryTests = _database.CategoryTests.Where(t => t.CategoryID == categoryID).ToList();
+
+            foreach (var test in categoryTests.ToList())
+            {
+                var existing = scorecard.Tests.FirstOrDefault(t => t.ID == test.ID);
+                if (existing == null)
+                {
+                    var scorecardTest = ScorecardTestModel.FromCategoryTest(test, scorecard.ID);
+                    _database.ScorecardTests.Add(scorecardTest);
+                }
+            }
+
+            _database.SaveChanges();
+            
+            return RedirectToAction("ScorecardDetails", new { id = id });
+        }
+
+        [HttpGet]
+        public IActionResult ImportTests()
+        {
+            var viewModel = new ImportTestsViewModel
+            {
+                Instructions = Strings.ImportTests,
+                Separator = ','
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public IActionResult ImportTests(ImportTestsViewModel viewModel)
+        {
+            var tests = Utils.Import.CreateTests(viewModel.Separator, viewModel.Text);
+            var allCategories = _database.Categories.ToList();
+
+            tests.ForEach(t =>
+            {
+                var category = _database.Categories.FirstOrDefault(c => c.Name == t.CategoryName);
+                if (category == null)
+                {
+                    category = new CategoryModel
+                    {
+                        Name = t.CategoryName
+                    };
+
+                    _database.Categories.Add(category);
+                    _database.SaveChanges();
+                }
+
+                t.CategoryID = category.ID;
+
+                _database.CategoryTests.Add(t);
+            });
+
+            _database.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public IActionResult EditCategoryTest(Guid id)
+        {
+            var test = _database.CategoryTests.Find(id);
+            var categories = _database.Categories.ToList();
+
+            if (test == null)
+            {
+                return NotFound();
+            }
+
+            var viewModel = new EditCategoryTestViewModel
+            {
+                SelectedCategoryID = test.CategoryID,
+                CategoriesList = new SelectList(categories, "ID", "Name"),
+                Test = test,
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public IActionResult EditCategoryTest(EditCategoryTestViewModel viewModel)
+        {
+            var originalCategoryID = viewModel.Test.CategoryID;
+
+            viewModel.Test.CategoryID = viewModel.SelectedCategoryID;
+
+            _database.CategoryTests.Update(viewModel.Test);
+            _database.SaveChanges();
+
+            return RedirectToAction("CategoryDetails", new { id = originalCategoryID });
+        }
+
+        [HttpGet]
+        public IActionResult DeleteCategory(Guid id)
+        {
+            var category = _database.Categories.Find(id);
+
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            _database.Categories.Remove(category);
+            _database.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public IActionResult EditCategoryDetails(Guid id)
+        {
+            var category = _database.Categories.Find(id);
+
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            return View(category);
+        }
+
+        [HttpPost]
+        public IActionResult EditCategoryDetails(CategoryModel category)
+        {
+            _database.Categories.Update(category);
+            _database.SaveChanges();
+
+            return RedirectToAction("CategoryDetails", new { id = category.ID });
         }
     }
 }

@@ -1,0 +1,98 @@
+﻿@model TestingFramework.ViewModels.Tasks.TaskDetailsViewModel
+
+@{
+    ViewData["Title"] = "Task Details";
+}
+
+<style>
+    .top-btn {
+        width: 125px;
+    }
+
+    .desc-text {
+        width: 400px;
+        height: 125px;
+    }
+
+    .status-dropdown {
+        width: 250px;
+    }
+
+    .abandon-btn {
+        margin-left: 25px;
+    }
+</style>
+
+<h1>Task Details</h1>
+<hr />
+
+<form asp-action="Details">
+    <div asp-validation-summary="None" class="text-danger"></div>
+    @Html.HiddenFor(model => Model.Task.ID)
+    @Html.HiddenFor(model => Model.Task.Created)
+    @Html.HiddenFor(model => Model.Task.CreatedBy)
+    <div>
+        <dl class="row">
+            <dt class="col-sm-2">
+                <bold>Created</bold>
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Task.Created)
+            </dd>
+            <dt class="col-sm-2">
+                <bold>Created By</bold>
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Task.CreatedBy)
+            </dd>
+            <dt class="col-sm-2">
+                <bold>Owner</bold>
+            </dt>
+            @if (Model.HasHowner())
+            {
+                @Html.HiddenFor(model => Model.Task.Owner)
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.OwnerName)
+                    @Html.ActionLink("Abandon", "SetOpen", new { id = Model.Task.ID }, new { @class = "btn btn-sm btn-danger abandon-btn" })
+                </dd>
+            }
+            else
+            {
+                <dd class="col-sm-10">
+                    @Html.DropDownListFor(model => model.Task.Owner, Model.UserOptions, "", new { @class = "status-dropdown" })
+                </dd>
+            }
+            <dt class="col-sm-2">
+                <bold>Status</bold>
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DropDownListFor(model => model.Task.Status, Model.StatusOptions, new { @class = "status-dropdown" })
+            </dd>
+        </dl>
+        <br />
+        <dl class="row">
+            <dt class="col-sm-2">
+                <bold>Description</bold>
+            </dt>
+            <dd class="col-sm-10">
+                @Html.TextAreaFor(model => model.Task.Description, new { @class = "desc-text" })
+            </dd>
+            @if (Model.IsClosed())
+            {
+                <dt class="col-sm-2">
+                    <bold>Completed</bold>
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Task.Completed)
+                </dd>
+            }
+        </dl>
+    </div>
+
+    <div class="col-md-7">
+        @Html.ActionLink("Back", "Index", new { }, new { @class = "btn btn-secondary btn-sm top-btn", @style = "float:left" })
+        <input type="submit" value="Update" class="btn btn-sm btn-success top-btn" style="float:right" />
+    </div>
+</form>
+<br />
+<hr />

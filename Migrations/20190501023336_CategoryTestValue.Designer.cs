@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TestingFramework.Data;
@@ -9,9 +10,10 @@ using TestingFramework.Data;
 namespace TestingFramework.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190501023336_CategoryTestValue")]
+    partial class CategoryTestValue
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -283,8 +285,6 @@ namespace TestingFramework.Migrations
 
                     b.Property<Guid>("CategoryID");
 
-                    b.Property<Guid>("CategoryTestID");
-
                     b.Property<string>("Description");
 
                     b.Property<string>("ExpectedResult");
@@ -292,6 +292,8 @@ namespace TestingFramework.Migrations
                     b.Property<Guid>("ScorecardID");
 
                     b.Property<Guid?>("ScorecardModelID");
+
+                    b.Property<Guid>("TestID");
 
                     b.Property<double>("Value");
 
@@ -315,9 +317,9 @@ namespace TestingFramework.Migrations
 
                     b.Property<string>("Description");
 
-                    b.Property<Guid?>("Owner");
+                    b.Property<bool>("Open");
 
-                    b.Property<string>("Status");
+                    b.Property<Guid>("Owner");
 
                     b.HasKey("ID");
 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TestingFramework.Extensions;
 using TestingFramework.Models;
+using TestingFramework.Models.Tasks;
 
 namespace TestingFramework.ViewModels
 {
@@ -12,6 +13,7 @@ namespace TestingFramework.ViewModels
         public IEnumerable<ScorecardModel> Scorecards { get; set; }
         public IEnumerable<ScorecardProgressModel> ScorecardsInProgress { get; set; }
         public IEnumerable<ScorecardTestModel> ScorecardTests { get; set; }
+        public IEnumerable<TaskModel> UserTasks { get; set; }
 
         public string GetProgress(Guid id)
         {

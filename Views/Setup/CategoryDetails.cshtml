@@ -28,12 +28,6 @@
             @Html.DisplayFor(model => model.Category.Description)
         </dd>
         <dt class="col-sm-2">
-            Unique ID
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Category.ID)
-        </dd>
-        <dt class="col-sm-2">
             Test Count
         </dt>
         <dd class="col-sm-10">
@@ -44,9 +38,21 @@
         </dd>
     </dl>
     <br />
+    <div>
+        @Html.ActionLink("Back", "Index", new { }, new { @class = "btn btn-secondary btn-sm edit-btn", @style = "float:left" })
+    </div>
+    <div style="float:right">
+        @Html.ActionLink("Delete", "DeleteCategory", new { id = Model.Category.ID }, new { @class = "btn btn-danger btn-sm edit-btn" })
+        @Html.ActionLink("Edit Details", "EditCategoryDetails", new { id = Model.Category.ID }, new { @class = "btn btn-primary btn-sm edit-btn" })
+        @Html.ActionLink("Create Test", "CreateCategoryTest", new { id = Model.Category.ID }, new { @class = "btn btn-success btn-sm edit-btn" })
+    </div>
+    <br />
+    <hr />
+    <br />
+    <br />
+    <br />
 
     <h3 style="float: left">Tests</h3>
-    <a asp-action="CreateCategoryTest" asp-route-id="@Model.Category.ID" as style="float:right">Create Test</a>
     <table class="table">
         @{
             var defaultTest = Model.Tests.FirstOrDefault();
@@ -66,20 +72,17 @@
             @foreach (var item in Model.Tests)
             {
                 <tr>
-                    <td width="20%">
+                    <td width="45%">
                         @Html.DisplayFor(modelItem => item.Description)
                     </td>
-                    <td width="60%">
+                    <td width="45%">
                         @Html.DisplayFor(modelItem => item.ExpectedResult)
                     </td>
-                    <td width="20%">
-                        @Html.ActionLink("Edit", "EditTest", new { id = item.ID }, new { @class = "btn btn-primary btn-sm edit-btn", @style = "float:right" })
+                    <td width="10%">
+                        @Html.ActionLink("Edit", "EditCategoryTest", new { id = item.ID }, new { @class = "btn btn-primary btn-sm edit-btn", @style = "float:right" })
                     </td>
                 </tr>
             }
         </tbody>
     </table>
-</div>
-<div>
-    <a asp-action="Index">Back to Setup</a>
 </div>

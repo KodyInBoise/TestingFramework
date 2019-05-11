@@ -8,6 +8,11 @@
     .add-btn {
         width: 100px;
     }
+    .category-dropdown {
+        width: 70%;
+        float: left;
+    }
+
 </style>
 
 <h1>Add Scorecard Tests</h1>
@@ -47,16 +52,22 @@
     @{
         var categoryName = Model.Categories.FirstOrDefault(c => c.ID == Model.SelectedCategoryID)?.Name ?? "Select Category";
     }
-    <button class="btn btn-block dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <button class="btn btn-outline-primary dropdown-toggle category-dropdown" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         @categoryName
     </button>
     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
         @foreach (var category in Model.Categories)
         {
             @Html.ActionLink(category.Name, "AddScorecardTests", new { id = Model.Scorecard.ID, categoryID = category.ID },
-                new { @class = "dropdown-item" })
+                new { @class = "dropdown-item dropdown-item-wide"})
         }
     </div>
+    @Html.ActionLink("Add All", "AddAllCategoryTests", new { id = Model.Scorecard.ID, categoryID = Model.SelectedCategoryID }, 
+            new { @class="btn btn-success add-btn", @style="float:right" })
+    <br />
+    <br />
+    <br />
+</div>
 
     <table class="table">
         @{
@@ -91,7 +102,6 @@
             }
         </tbody>
     </table>
-</div>
 
 <div>
     <a asp-action="Index">Back to Setup</a>

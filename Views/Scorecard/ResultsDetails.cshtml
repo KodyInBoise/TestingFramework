@@ -43,7 +43,7 @@
             Duration:
         </dt>
         <dd class="col-sm-10">
-            @{ 
+            @{
                 var duration = Model.GetDuration();
             }
             @Html.DisplayFor(model => duration)
@@ -67,4 +67,81 @@
             @Html.DisplayFor(model => score)
         </dd>
     </dl>
+    <hr />
+
+    <h3 style="float: left">Failed Tests</h3>
+    <table class="table">
+        @{
+            var failedResults = Model.Results.GetTestResults().Where(r => r.Passed == false);
+        }
+        <thead>
+            <tr>
+                <th>
+                    Description
+                </th>
+                <th>
+                    Expected Result
+                </th>
+                <th>
+                    Notes
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in failedResults)
+            {
+                var test = Model.GetScorecardTest(item.TestID);
+                <tr>
+                    <td width="40%">
+                        @Html.DisplayFor(modelItem => test.Description)
+                    </td>
+                    <td width="40%">
+                        @Html.DisplayFor(modelItem => test.ExpectedResult)
+                    </td>
+                    <td width="20%">
+                        @Html.DisplayFor(modelItem => item.Notes)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <br />
+    <br />
+
+    <h3 style="float: left">Passed Tests</h3>
+    <table class="table">
+        @{
+            var passedResults = Model.Results.GetTestResults().Where(r => r.Passed == true);
+        }
+        <thead>
+            <tr>
+                <th width="40%">
+                    Description
+                </th>
+                <th width="40%">
+                    Expected Result
+                </th>
+                <th width="40%">
+                    Notes
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in passedResults)
+            {
+                var test = Model.GetScorecardTest(item.TestID);
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => test.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => test.ExpectedResult)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Notes)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>
