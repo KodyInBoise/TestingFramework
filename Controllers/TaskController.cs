@@ -106,5 +106,11 @@ namespace TestingFramework.Controllers
 
             return RedirectToAction("Details", new { id = viewModel.Task.ID });
         }
+
+        [HttpGet]
+        public IActionResult Closed()
+        {
+            return View();
+        }
     }
 }
