@@ -25,7 +25,7 @@ namespace TestingFramework.Controllers
         {
             var viewModel = new TasksHomeViewModel
             {
-                AvailableTasks = _database.Tasks.Where(t => t.Owner == null || t.Owner == default(Guid)),
+                AvailableTasks = _database.Tasks.Where(t => (t.Owner == null || t.Owner == default(Guid)) && t.Status != Strings.Status.Closed),
                 UserTasks = _database.Tasks.Where(t => t.Owner == Utils.GetUserID(User) && t.Status == Strings.Status.Open)
             };
 
@@ -110,7 +110,37 @@ namespace TestingFramework.Controllers
         [HttpGet]
         public IActionResult Closed()
         {
-            return View();
+            var viewModel = new ClosedTasksViewModel
+            {
+                ClosedTasks = _database.Tasks.Where(t => t.Status == Strings.Status.Closed),
+                UserNames = new Dictionary<Guid, string>()
+            };
+
+            var users = _database.Users.ToList();
+            users.ForEach(u =>
+            {
+                viewModel.UserNames.Add(Guid.Parse(u.Id), u.UserName);
+            });
+
+            return View(viewModel);
+        }
+
+        [HttpGet]
+        public IActionResult RemoveOwner(Guid id)
+        {
+            var task = _database.Tasks.Find(id);
+
+            if (task == null)
+            {
+                return NotFound();
+            }
+
+            task.Owner = default(Guid);
+
+            _database.Tasks.Update(task);
+            _database.SaveChanges();
+
+            return RedirectToAction("Details", new { id = id });
         }
     }
 }

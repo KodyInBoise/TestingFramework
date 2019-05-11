@@ -1,0 +1,62 @@
+﻿@model TestingFramework.ViewModels.Tasks.ClosedTasksViewModel
+
+@{
+    ViewData["Title"] = "Closed Tasks";
+    var defaultTask = Model.ClosedTasks.FirstOrDefault();
+}
+
+<style>
+    .action-btn {
+        width: 100px;
+        float: right;
+    }
+
+    .header-btn {
+        width: 125px;
+        margin-top: 8px;
+    }
+</style>
+
+<h1 style="float:left">Closed Tasks</h1>
+@Html.ActionLink("Back", "Index", new { }, new { @class = "btn btn-secondary header-btn", @style = "float:right" })
+<br />
+<br />
+<br />
+
+<table class="table">
+    <thead>
+        <tr>
+            <th width="20%">
+                @Html.DisplayNameFor(model => defaultTask.Completed)
+            </th>
+            <th width="20%">
+                @Html.DisplayNameFor(model => defaultTask.Owner)
+            </th>
+            <th width="50%">
+                @Html.DisplayNameFor(model => defaultTask.Description)
+            </th>
+            <th width="10%"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.ClosedTasks)
+        {
+            var userName = Model.GetUserName(item.Owner);
+
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Completed)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => userName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.ActionLink("Details", "Details", new { id = item.ID }, new { @class = "btn btn-sm btn-primary action-btn" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
