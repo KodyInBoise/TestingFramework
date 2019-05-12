@@ -15,6 +15,7 @@ namespace TestingFramework.ViewModels.Tasks
         public SelectList UserOptions { get; set; }
         public string OwnerName { get; set; }
         public bool ViewHistory { get; set; }
+        public IEnumerable<TaskCommentModel> Comments { get; set; }
 
         public string OriginalDescription { get; set; }
         public string OriginalStatus { get; set; }
@@ -60,6 +61,18 @@ namespace TestingFramework.ViewModels.Tasks
             }
 
             return updates;
+        }
+
+        public string GetCommentEntriesText()
+        {
+            var text = "";
+
+            foreach (var comment in Comments)
+            {
+                text += comment.ToString() + Environment.NewLine + Environment.NewLine;
+            }
+
+            return text;
         }
     }    
 }

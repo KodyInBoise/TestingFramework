@@ -21,6 +21,10 @@
     .abandon-btn {
         margin-left: 25px;
     }
+
+    .comment-text {
+        width: 750px;
+    }
 </style>
 
 <h1>Task Details</h1>
@@ -120,11 +124,10 @@
 </form>
 <br />
 <hr />
+<br />
 
 @if (Model.ViewHistory)
 {
-    var defaultEntry = Model.Task.History.FirstOrDefault();
-
     <h3>History</h3>
     <table class="table">
         <thead>
@@ -139,6 +142,32 @@
         </thead>
         <tbody>
             @foreach (var item in Model.Task.History)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Timestamp)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Body)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <h3 style="float:left">Comments</h3>
+    @Html.ActionLink("Add Comment", "Details", new { id = Model.Task.ID }, new { @class = "btn btn-success btn-sm top-btn", @style = "float:right" })
+    <table class="table">
+        <thead>
+            <tr>
+                <th width="90%"></th>
+                <th width="10%"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Comments)
             {
                 <tr>
                     <td>

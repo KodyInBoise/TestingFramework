@@ -96,6 +96,7 @@ namespace TestingFramework.Controllers
                 UserOptions = new SelectList(users, "Id", "UserName"),
                 OwnerName = owner?.UserName ?? "",
                 ViewHistory = viewHistory == true,
+                Comments = _database.TaskComments.Where(c => c.TaskID == task.ID)
             };
 
             if (task.Status == Strings.Status.Closed && viewHistory == null)
@@ -109,6 +110,15 @@ namespace TestingFramework.Controllers
             {
                 viewModel.Task.History = _database.TaskHistory.Where(th => th.TaskID == task.ID).ToList();
                 viewModel.Task.History.OrderBy(th => th.Timestamp).Reverse();
+            }
+            else
+            {
+                foreach (var comment in viewModel.Comments)
+                {
+                    var user = users.FirstOrDefault(c => c.Id == comment.UserID.ToString());
+
+                    comment.UserName = user?.UserName ?? "";
+                }
             }
 
             return View(viewModel);
@@ -163,6 +173,23 @@ namespace TestingFramework.Controllers
             _database.SaveChanges();
 
             return RedirectToAction("Details", new { id = id });
+        }
+
+        [HttpGet]
+        public IActionResult AddComment(Guid taskID, string body)
+        {
+            var comment = new TaskCommentModel
+            {
+                Timestamp = DateTime.Now,
+                TaskID = taskID,
+                UserID = Utils.GetUserID(User),
+                Body = body
+            };
+
+            _database.TaskComments.Add(comment);
+            _database.SaveChanges();
+
+            return RedirectToAction("Details", new { id = taskID, viewHistory = false });
         }
     }
 }

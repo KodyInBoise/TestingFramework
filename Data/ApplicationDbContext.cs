@@ -24,6 +24,7 @@ namespace TestingFramework.Data
         public DbSet<ScorecardResultModel> ScorecardResults { get; set; }
         public DbSet<TaskModel> Tasks { get; set; }
         public DbSet<TaskHistoryModel> TaskHistory { get; set; }
+        public DbSet<TaskCommentModel> TaskComments { get; set; }
         public DbSet<IdentityUser> AspNetUsers { get; set; }
     }
 }
