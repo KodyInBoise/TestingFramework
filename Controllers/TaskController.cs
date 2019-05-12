@@ -67,7 +67,7 @@ namespace TestingFramework.Controllers
         }
 
         [HttpGet]
-        public IActionResult Details(Guid id, bool? viewHistory = null)
+        public IActionResult Details(Guid id, bool? viewHistory = null, bool? addComment = null)
         {
             var task = _database.Tasks.Find(id);
 
@@ -96,6 +96,7 @@ namespace TestingFramework.Controllers
                 UserOptions = new SelectList(users, "Id", "UserName"),
                 OwnerName = owner?.UserName ?? "",
                 ViewHistory = viewHistory == true,
+                AddComment = addComment == true,
                 Comments = _database.TaskComments.Where(c => c.TaskID == task.ID)
             };
 

@@ -15,6 +15,7 @@ namespace TestingFramework.ViewModels.Tasks
         public SelectList UserOptions { get; set; }
         public string OwnerName { get; set; }
         public bool ViewHistory { get; set; }
+        public bool AddComment { get; set; }
         public IEnumerable<TaskCommentModel> Comments { get; set; }
 
         public string OriginalDescription { get; set; }

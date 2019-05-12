@@ -155,10 +155,24 @@
         </tbody>
     </table>
 }
+else if (Model.AddComment)
+{
+    var commentBody = "";
+    
+    <h3>Add Comment</h3>
+    <div>
+        @Html.TextAreaFor(model => commentBody, new { @class = "comment-text" })
+        <br />
+        <br />
+        @Html.ActionLink("Add Comment", "AddComment", new { taskID = Model.Task.ID, body = commentBody },
+            new { @class = "btn btn-sm btn-success top-btn" })
+    </div>
+}
 else
 {
     <h3 style="float:left">Comments</h3>
-    @Html.ActionLink("Add Comment", "Details", new { id = Model.Task.ID }, new { @class = "btn btn-success btn-sm top-btn", @style = "float:right" })
+    @Html.ActionLink("Add Comment", "Details", new { id = Model.Task.ID, addComment = true },
+            new { @class = "btn btn-success btn-sm top-btn", @style = "float:right" })
     <table class="table">
         <thead>
             <tr>
