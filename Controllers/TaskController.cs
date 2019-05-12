@@ -56,16 +56,18 @@ namespace TestingFramework.Controllers
                 History = new List<TaskHistoryModel>()
             };
 
-            task.AddHistory($"{User.Identity.Name} created new task");
-
             _database.Tasks.Add(task);
+
+            var historyEntry = task.AddHistory($"{User.Identity.Name} created new task");
+
+            _database.TaskHistory.Add(historyEntry);
             _database.SaveChanges();
 
             return RedirectToAction("Index");
         }
 
         [HttpGet]
-        public IActionResult Details(Guid id)
+        public IActionResult Details(Guid id, bool viewHistory = false)
         {
             var task = _database.Tasks.Find(id);
 
@@ -92,8 +94,14 @@ namespace TestingFramework.Controllers
                 Task = task,
                 StatusOptions = new SelectList(statusOptions),
                 UserOptions = new SelectList(users, "Id", "UserName"),
-                OwnerName = owner?.UserName ?? ""
+                OwnerName = owner?.UserName ?? "",
+                ViewHistory = viewHistory
             };
+
+            if (viewHistory)
+            {
+                viewModel.Task.History = _database.TaskHistory.Where(th => th.TaskID == task.ID).ToList();
+            }
 
             return View(viewModel);
         }

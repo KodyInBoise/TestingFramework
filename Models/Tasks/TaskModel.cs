@@ -18,7 +18,7 @@ namespace TestingFramework.Models.Tasks
         public List<TaskHistoryModel> History { get; set; }
 
 
-        public void AddHistory(string body)
+        public TaskHistoryModel AddHistory(string body)
         {
             var entry = new TaskHistoryModel
             {
@@ -28,6 +28,8 @@ namespace TestingFramework.Models.Tasks
             };
 
             History.Add(entry);
+
+            return entry;
         }
     }
 }

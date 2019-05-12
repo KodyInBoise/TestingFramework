@@ -101,10 +101,43 @@
         </dl>
     </div>
 
-    <div class="col-md-7">
+    <div>
         @Html.ActionLink("Back", "Index", new { }, new { @class = "btn btn-secondary btn-sm top-btn", @style = "float:left" })
         <input type="submit" value="Update" class="btn btn-sm btn-success top-btn" style="float:right" />
+        @Html.ActionLink("History", "Details", new { id = Model.Task.ID, viewHistory = true }, new { @class = "btn btn-primary btn-sm top-btn", @style = "float:right; margin-right: 10px;" })
     </div>
 </form>
 <br />
 <hr />
+
+@if (Model.ViewHistory)
+{
+    var defaultEntry = Model.Task.History.FirstOrDefault();
+
+    <h3>History</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th width="20%">
+                    Timestamp
+                </th>
+                <th width="80%">
+                    Entry
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Task.History)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Timestamp)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Body)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

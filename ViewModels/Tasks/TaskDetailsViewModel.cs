@@ -14,6 +14,7 @@ namespace TestingFramework.ViewModels.Tasks
         public SelectList StatusOptions { get; set; }
         public SelectList UserOptions { get; set; }
         public string OwnerName { get; set; }
+        public bool ViewHistory { get; set; }
 
         public bool IsClosed()
         {
