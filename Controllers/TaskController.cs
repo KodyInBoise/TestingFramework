@@ -52,8 +52,11 @@ namespace TestingFramework.Controllers
                 CreatedBy = User.Identity.Name,
                 Status = Strings.Status.Open,
                 Description = viewModel.Description,
-                Owner = viewModel.SelectedOwner
+                Owner = viewModel.SelectedOwner,
+                History = new List<TaskHistoryModel>()
             };
+
+            task.AddHistory($"{User.Identity.Name} created new task");
 
             _database.Tasks.Add(task);
             _database.SaveChanges();

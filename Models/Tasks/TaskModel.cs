@@ -15,10 +15,19 @@ namespace TestingFramework.Models.Tasks
         public string Description { get; set; }
         public string Status { get; set; }
         public DateTime Completed { get; set; }
+        public List<TaskHistoryModel> History { get; set; }
 
-        //public bool IsClosed()
-        //{
-        //    return Status == Strings.Status.Closed;
-        //}
+
+        public void AddHistory(string body)
+        {
+            var entry = new TaskHistoryModel
+            {
+                TaskID = ID,
+                Timestamp = DateTime.Now,
+                Body = body
+            };
+
+            History.Add(entry);
+        }
     }
 }
