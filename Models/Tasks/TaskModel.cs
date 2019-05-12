@@ -6,7 +6,7 @@ using TestingFramework.Extensions;
 
 namespace TestingFramework.Models.Tasks
 {
-    public class TaskModel
+    public class TaskModel : ITask
     {
         public Guid ID { get; set; }
         public DateTime Created { get; set; }
@@ -26,6 +26,9 @@ namespace TestingFramework.Models.Tasks
                 Timestamp = DateTime.Now,
                 Body = body
             };
+
+            if (History == null)
+                History = new List<TaskHistoryModel>();
 
             History.Add(entry);
 

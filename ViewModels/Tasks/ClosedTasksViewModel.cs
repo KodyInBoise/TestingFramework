@@ -13,9 +13,16 @@ namespace TestingFramework.ViewModels.Tasks
 
         public string GetUserName(Guid? id)
         {
-            UserNames.TryGetValue((Guid)id, out var name);
+            try
+            {
+                UserNames.TryGetValue((Guid)id, out var name);
 
-            return name ?? "";
+                return name;
+            }
+            catch
+            {
+                return "";
+            }
         }
     }
 }

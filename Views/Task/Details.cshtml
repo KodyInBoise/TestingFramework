@@ -31,6 +31,10 @@
     @Html.HiddenFor(model => Model.Task.ID)
     @Html.HiddenFor(model => Model.Task.Created)
     @Html.HiddenFor(model => Model.Task.CreatedBy)
+
+    @Html.HiddenFor(model => Model.OriginalDescription)
+    @Html.HiddenFor(model => Model.OriginalStatus)
+    @Html.HiddenFor(model => Model.OriginalOwner)
     <div>
         <dl class="row">
             <dt class="col-sm-2">
@@ -104,7 +108,14 @@
     <div>
         @Html.ActionLink("Back", "Index", new { }, new { @class = "btn btn-secondary btn-sm top-btn", @style = "float:left" })
         <input type="submit" value="Update" class="btn btn-sm btn-success top-btn" style="float:right" />
-        @Html.ActionLink("History", "Details", new { id = Model.Task.ID, viewHistory = true }, new { @class = "btn btn-primary btn-sm top-btn", @style = "float:right; margin-right: 10px;" })
+        @if (Model.ViewHistory)
+        {
+            @Html.ActionLink("View Comments", "Details", new { id = Model.Task.ID, viewHistory = false }, new { @class = "btn btn-primary btn-sm top-btn", @style = "float:right; margin-right: 10px;" })
+        }
+        else
+        {
+            @Html.ActionLink("History", "Details", new { id = Model.Task.ID, viewHistory = true }, new { @class = "btn btn-primary btn-sm top-btn", @style = "float:right; margin-right: 10px;" })
+        }
     </div>
 </form>
 <br />

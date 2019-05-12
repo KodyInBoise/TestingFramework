@@ -67,7 +67,7 @@ namespace TestingFramework.Controllers
         }
 
         [HttpGet]
-        public IActionResult Details(Guid id, bool viewHistory = false)
+        public IActionResult Details(Guid id, bool? viewHistory = null)
         {
             var task = _database.Tasks.Find(id);
 
@@ -95,12 +95,20 @@ namespace TestingFramework.Controllers
                 StatusOptions = new SelectList(statusOptions),
                 UserOptions = new SelectList(users, "Id", "UserName"),
                 OwnerName = owner?.UserName ?? "",
-                ViewHistory = viewHistory
+                ViewHistory = viewHistory == true,
             };
 
-            if (viewHistory)
+            if (task.Status == Strings.Status.Closed && viewHistory == null)
+            {
+                viewModel.ViewHistory = true;
+            }
+
+            viewModel.SetOriginalInfo();
+
+            if (viewModel.ViewHistory)
             {
                 viewModel.Task.History = _database.TaskHistory.Where(th => th.TaskID == task.ID).ToList();
+                viewModel.Task.History.OrderBy(th => th.Timestamp).Reverse();
             }
 
             return View(viewModel);
@@ -111,6 +119,9 @@ namespace TestingFramework.Controllers
         {
             if (viewModel.Task.Status == Strings.Status.Closed)
                 viewModel.Task.Completed = DateTime.Now;
+
+            var updateHistory = viewModel.CreateUpdateHistory(User.Identity.Name);
+            updateHistory.ForEach(uh => _database.TaskHistory.Add(uh));
 
             _database.Tasks.Update(viewModel.Task);
             _database.SaveChanges();
