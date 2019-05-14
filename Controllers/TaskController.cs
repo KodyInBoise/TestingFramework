@@ -58,7 +58,7 @@ namespace TestingFramework.Controllers
 
             _database.Tasks.Add(task);
 
-            var historyEntry = task.AddHistory($"{User.Identity.Name} created new task");
+            var historyEntry = task.AddHistory($"Created by {User.Identity.Name}");
 
             _database.TaskHistory.Add(historyEntry);
             _database.SaveChanges();
@@ -97,7 +97,7 @@ namespace TestingFramework.Controllers
                 OwnerName = owner?.UserName ?? "",
                 ViewHistory = viewHistory == true,
                 AddComment = addComment == true,
-                Comments = _database.TaskComments.Where(c => c.TaskID == task.ID)
+                CommentBody = "",
             };
 
             if (task.Status == Strings.Status.Closed && viewHistory == null)
@@ -109,17 +109,22 @@ namespace TestingFramework.Controllers
 
             if (viewModel.ViewHistory)
             {
-                viewModel.Task.History = _database.TaskHistory.Where(th => th.TaskID == task.ID).ToList();
-                viewModel.Task.History.OrderBy(th => th.Timestamp).Reverse();
+                viewModel.Task.History = _database.TaskHistory.Where(th => th.TaskID == task.ID).OrderBy(th => th.Timestamp).ToList();
+                viewModel.Task.History.Reverse();
             }
             else
             {
-                foreach (var comment in viewModel.Comments)
+                var comments = _database.TaskComments.Where(c => c.TaskID == task.ID).OrderBy(c => c.Timestamp).ToList();
+                comments.Reverse();
+
+                foreach (var comment in comments)
                 {
-                    var user = users.FirstOrDefault(c => c.Id == comment.UserID.ToString());
+                    var user = _database.AspNetUsers.Find(comment.UserID.ToString());
 
                     comment.UserName = user?.UserName ?? "";
                 }
+
+                viewModel.Comments = comments;
             }
 
             return View(viewModel);
@@ -130,6 +135,22 @@ namespace TestingFramework.Controllers
         {
             if (viewModel.Task.Status == Strings.Status.Closed)
                 viewModel.Task.Completed = DateTime.Now;
+
+            if (viewModel.AddComment && !string.IsNullOrEmpty(viewModel.CommentBody))
+            {
+                var comment = new TaskCommentModel
+                {
+                    Timestamp = DateTime.Now,
+                    TaskID = viewModel.Task.ID,
+                    UserID = Utils.GetUserID(User),
+                    Body = viewModel.CommentBody
+                };
+
+                var commentHistory = viewModel.Task.AddHistory($"{User.Identity.Name} added a comment");
+
+                _database.TaskComments.Add(comment);
+                _database.TaskHistory.Add(commentHistory);
+            }
 
             var updateHistory = viewModel.CreateUpdateHistory(User.Identity.Name);
             updateHistory.ForEach(uh => _database.TaskHistory.Add(uh));
@@ -174,23 +195,6 @@ namespace TestingFramework.Controllers
             _database.SaveChanges();
 
             return RedirectToAction("Details", new { id = id });
-        }
-
-        [HttpGet]
-        public IActionResult AddComment(Guid taskID, string body)
-        {
-            var comment = new TaskCommentModel
-            {
-                Timestamp = DateTime.Now,
-                TaskID = taskID,
-                UserID = Utils.GetUserID(User),
-                Body = body
-            };
-
-            _database.TaskComments.Add(comment);
-            _database.SaveChanges();
-
-            return RedirectToAction("Details", new { id = taskID, viewHistory = false });
         }
     }
 }

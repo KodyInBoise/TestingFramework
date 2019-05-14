@@ -17,6 +17,7 @@ namespace TestingFramework.ViewModels.Tasks
         public bool ViewHistory { get; set; }
         public bool AddComment { get; set; }
         public IEnumerable<TaskCommentModel> Comments { get; set; }
+        public string CommentBody { get; set; }
 
         public string OriginalDescription { get; set; }
         public string OriginalStatus { get; set; }

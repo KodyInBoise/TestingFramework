@@ -35,6 +35,7 @@
     @Html.HiddenFor(model => Model.Task.ID)
     @Html.HiddenFor(model => Model.Task.Created)
     @Html.HiddenFor(model => Model.Task.CreatedBy)
+    @Html.HiddenFor(model => model.AddComment)
 
     @Html.HiddenFor(model => Model.OriginalDescription)
     @Html.HiddenFor(model => Model.OriginalStatus)
@@ -121,77 +122,71 @@
             @Html.ActionLink("History", "Details", new { id = Model.Task.ID, viewHistory = true }, new { @class = "btn btn-primary btn-sm top-btn", @style = "float:right; margin-right: 10px;" })
         }
     </div>
-</form>
-<br />
-<hr />
-<br />
+    <br />
+    <hr />
+    <br />
 
-@if (Model.ViewHistory)
-{
-    <h3>History</h3>
-    <table class="table">
-        <thead>
-            <tr>
-                <th width="20%">
-                    Timestamp
-                </th>
-                <th width="80%">
-                    Entry
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.Task.History)
-            {
+    @if (Model.ViewHistory)
+    {
+        <h3>History</h3>
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Timestamp)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Body)
-                    </td>
+                    <th width="20%">
+                        Timestamp
+                    </th>
+                    <th width="80%">
+                        Entry
+                    </th>
                 </tr>
-            }
-        </tbody>
-    </table>
-}
-else if (Model.AddComment)
-{
-    var commentBody = "";
-    
-    <h3>Add Comment</h3>
-    <div>
-        @Html.TextAreaFor(model => commentBody, new { @class = "comment-text" })
-        <br />
-        <br />
-        @Html.ActionLink("Add Comment", "AddComment", new { taskID = Model.Task.ID, body = commentBody },
-            new { @class = "btn btn-sm btn-success top-btn" })
-    </div>
-}
-else
-{
-    <h3 style="float:left">Comments</h3>
-    @Html.ActionLink("Add Comment", "Details", new { id = Model.Task.ID, addComment = true },
-            new { @class = "btn btn-success btn-sm top-btn", @style = "float:right" })
-    <table class="table">
-        <thead>
-            <tr>
-                <th width="90%"></th>
-                <th width="10%"></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.Comments)
-            {
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Task.History)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Timestamp)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Body)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else if (Model.AddComment)
+    {
+        <h3>Add Comment</h3>
+        <div>
+            @Html.TextAreaFor(model => Model.CommentBody, new { @class = "comment-text" })
+            <br />
+            <br />
+            <input type="submit" value="Update" class="btn btn-sm btn-success top-btn" />
+        </div>
+    }
+    else
+    {
+        <h3 style="float:left">Comments</h3>
+        @Html.ActionLink("Add Comment", "Details", new { id = Model.Task.ID, addComment = true },
+                new { @class = "btn btn-success btn-sm top-btn", @style = "float:right" })
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Timestamp)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Body)
-                    </td>
+                    <th width="100%"></th>
                 </tr>
-            }
-        </tbody>
-    </table>
-}
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Comments)
+                {
+                    var commentString = item.ToString();
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => commentString)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</form>
