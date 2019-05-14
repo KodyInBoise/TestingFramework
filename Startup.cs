@@ -61,7 +61,6 @@ namespace TestingFramework
             }
 
             app.UseStaticFiles();
-            app.UseCookiePolicy();
 
             app.UseAuthentication();
 
