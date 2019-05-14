@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
@@ -20,6 +21,11 @@ namespace TestingFramework
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseUrls("http://localhost:5000", "http://*:80")
+                .UseKestrel(options =>
+                {
+                    options.Listen(IPAddress.Loopback, 5000);  
+                    options.Listen(IPAddress.Any, 80);                          
+                })
                 .UseStartup<Startup>();
     }
 }
