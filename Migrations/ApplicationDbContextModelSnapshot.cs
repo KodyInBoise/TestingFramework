@@ -302,6 +302,44 @@ namespace TestingFramework.Migrations
                     b.ToTable("ScorecardTests");
                 });
 
+            modelBuilder.Entity("TestingFramework.Models.Tasks.TaskCommentModel", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Body");
+
+                    b.Property<Guid>("TaskID");
+
+                    b.Property<DateTime>("Timestamp");
+
+                    b.Property<Guid>("UserID");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("TaskComments");
+                });
+
+            modelBuilder.Entity("TestingFramework.Models.Tasks.TaskHistoryModel", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Body");
+
+                    b.Property<Guid>("TaskID");
+
+                    b.Property<Guid?>("TaskModelID");
+
+                    b.Property<DateTime>("Timestamp");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("TaskModelID");
+
+                    b.ToTable("TaskHistory");
+                });
+
             modelBuilder.Entity("TestingFramework.Models.Tasks.TaskModel", b =>
                 {
                     b.Property<Guid>("ID")
@@ -374,6 +412,13 @@ namespace TestingFramework.Migrations
                     b.HasOne("TestingFramework.Models.ScorecardModel")
                         .WithMany("Tests")
                         .HasForeignKey("ScorecardModelID");
+                });
+
+            modelBuilder.Entity("TestingFramework.Models.Tasks.TaskHistoryModel", b =>
+                {
+                    b.HasOne("TestingFramework.Models.Tasks.TaskModel")
+                        .WithMany("History")
+                        .HasForeignKey("TaskModelID");
                 });
 #pragma warning restore 612, 618
         }

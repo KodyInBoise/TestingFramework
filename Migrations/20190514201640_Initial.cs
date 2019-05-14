@@ -67,7 +67,8 @@ namespace TestingFramework.Migrations
                     ID = table.Column<Guid>(nullable: false),
                     CategoryID = table.Column<Guid>(nullable: false),
                     Description = table.Column<string>(nullable: true),
-                    ExpectedResult = table.Column<string>(nullable: true)
+                    ExpectedResult = table.Column<string>(nullable: true),
+                    Value = table.Column<double>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -84,7 +85,8 @@ namespace TestingFramework.Migrations
                     ScorecardNotes = table.Column<string>(nullable: true),
                     ResultsJson = table.Column<string>(nullable: true),
                     TotalTestCount = table.Column<int>(nullable: false),
-                    CompletedTimestamp = table.Column<DateTime>(nullable: false)
+                    CompletedTimestamp = table.Column<DateTime>(nullable: false),
+                    StartedTimestamp = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -97,7 +99,8 @@ namespace TestingFramework.Migrations
                 {
                     ID = table.Column<Guid>(nullable: false),
                     Name = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true)
+                    Description = table.Column<string>(nullable: true),
+                    DefaultTestValue = table.Column<double>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -123,15 +126,30 @@ namespace TestingFramework.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "TaskComments",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(nullable: false),
+                    TaskID = table.Column<Guid>(nullable: false),
+                    UserID = table.Column<Guid>(nullable: false),
+                    Timestamp = table.Column<DateTime>(nullable: false),
+                    Body = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TaskComments", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Tasks",
                 columns: table => new
                 {
                     ID = table.Column<Guid>(nullable: false),
                     Created = table.Column<DateTime>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
-                    Owner = table.Column<Guid>(nullable: false),
+                    Owner = table.Column<Guid>(nullable: true),
                     Description = table.Column<string>(nullable: true),
-                    Open = table.Column<bool>(nullable: false),
+                    Status = table.Column<string>(nullable: true),
                     Completed = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
@@ -250,6 +268,7 @@ namespace TestingFramework.Migrations
                 columns: table => new
                 {
                     ID = table.Column<Guid>(nullable: false),
+                    CategoryTestID = table.Column<Guid>(nullable: false),
                     ScorecardID = table.Column<Guid>(nullable: false),
                     CategoryID = table.Column<Guid>(nullable: false),
                     Description = table.Column<string>(nullable: true),
@@ -264,6 +283,27 @@ namespace TestingFramework.Migrations
                         name: "FK_ScorecardTests_Scorecards_ScorecardModelID",
                         column: x => x.ScorecardModelID,
                         principalTable: "Scorecards",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TaskHistory",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(nullable: false),
+                    TaskID = table.Column<Guid>(nullable: false),
+                    Timestamp = table.Column<DateTime>(nullable: false),
+                    Body = table.Column<string>(nullable: true),
+                    TaskModelID = table.Column<Guid>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TaskHistory", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_TaskHistory_Tasks_TaskModelID",
+                        column: x => x.TaskModelID,
+                        principalTable: "Tasks",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -309,6 +349,11 @@ namespace TestingFramework.Migrations
                 name: "IX_ScorecardTests_ScorecardModelID",
                 table: "ScorecardTests",
                 column: "ScorecardModelID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TaskHistory_TaskModelID",
+                table: "TaskHistory",
+                column: "TaskModelID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -344,7 +389,10 @@ namespace TestingFramework.Migrations
                 name: "ScorecardTests");
 
             migrationBuilder.DropTable(
-                name: "Tasks");
+                name: "TaskComments");
+
+            migrationBuilder.DropTable(
+                name: "TaskHistory");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -354,6 +402,9 @@ namespace TestingFramework.Migrations
 
             migrationBuilder.DropTable(
                 name: "Scorecards");
+
+            migrationBuilder.DropTable(
+                name: "Tasks");
         }
     }
 }

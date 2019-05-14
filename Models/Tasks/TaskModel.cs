@@ -6,7 +6,7 @@ using TestingFramework.Extensions;
 
 namespace TestingFramework.Models.Tasks
 {
-    public class TaskModel
+    public class TaskModel : ITask
     {
         public Guid ID { get; set; }
         public DateTime Created { get; set; }
@@ -15,10 +15,24 @@ namespace TestingFramework.Models.Tasks
         public string Description { get; set; }
         public string Status { get; set; }
         public DateTime Completed { get; set; }
+        public List<TaskHistoryModel> History { get; set; }
 
-        //public bool IsClosed()
-        //{
-        //    return Status == Strings.Status.Closed;
-        //}
+
+        public TaskHistoryModel AddHistory(string body)
+        {
+            var entry = new TaskHistoryModel
+            {
+                TaskID = ID,
+                Timestamp = DateTime.Now,
+                Body = body
+            };
+
+            if (History == null)
+                History = new List<TaskHistoryModel>();
+
+            History.Add(entry);
+
+            return entry;
+        }
     }
 }
