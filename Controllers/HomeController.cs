@@ -19,8 +19,6 @@ namespace TestingFramework.Controllers
         public HomeController([FromServices] ApplicationDbContext db)
         {
             _database = db;
-
-            Utils.Admin.ClearData(db);
         }
         
         public IActionResult Index()

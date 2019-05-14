@@ -36,10 +36,10 @@
                         @if (SignInManager.IsSignedIn(User))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Task" asp-action="Index">Tasks</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Results">Scorecards</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Results">Results</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Task" asp-action="Index">Tasks</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Setup" asp-action="Index">Setup</a>
