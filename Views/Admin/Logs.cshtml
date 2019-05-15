@@ -1,0 +1,27 @@
+﻿@model IEnumerable<TestingFramework.Models.LogEntryModel>
+
+@{
+    ViewData["Title"] = "Logs";
+}
+
+<h1>Logs</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th width="100%"></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            @{ 
+                var contentString = item.ToString();
+            }
+            <td>
+                @contentString
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

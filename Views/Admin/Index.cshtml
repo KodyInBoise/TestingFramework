@@ -1,0 +1,20 @@
+﻿
+@{
+    ViewData["Title"] = "Admin";
+}
+
+<style>
+    .btns {
+        width: 200px;
+    }
+</style>
+<h1>Admin</h1>
+<hr />
+
+@Html.ActionLink("Logs", "Logs", new { }, new { @class = "btn btn-md btn-primary btns" })
+<br />
+<br />
+
+@Html.ActionLink("Users", "Users", new { }, new { @class = "btn btn-md btn-primary btns" })
+<br />
+<br />

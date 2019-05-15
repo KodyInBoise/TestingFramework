@@ -45,8 +45,10 @@ namespace TestingFramework.Controllers
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        public IActionResult Error(Exception ex)
         {
+            LoggingUtil.AddEntry("EXCEPTION", ex.Message);
+
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 

@@ -100,5 +100,13 @@ namespace TestingFramework.Extensions
 
             return userInfo;
         }
+
+        public static bool UserIsAdmin(ApplicationDbContext database, ClaimsPrincipal user)
+        {
+            var userInfo = GetUserInfo(database, user);
+            var userRole = database.Roles.Find(userInfo.RoleID);
+
+            return userRole.Type == RoleType.Admin;
+        }
     }
 }

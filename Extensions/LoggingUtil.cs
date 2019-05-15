@@ -76,5 +76,12 @@ namespace TestingFramework.Extensions
 
             return JsonConvert.DeserializeObject<List<LogEntryModel>>(contents);
         }
+
+        public static IEnumerable<ILogEntry> GetCurrentLogEntries()
+        {
+            var path = _instance.GetCurrentLogPath();
+
+            return _instance.GetExistingEntries(path);
+        }
     }
 }
