@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using TestingFramework.Data;
 using TestingFramework.Models;
@@ -17,6 +18,9 @@ namespace TestingFramework.Extensions
 
     public class RoleHelper
     {
+        public const RoleType DefaultRoleType = RoleType.User;
+
+
         public static void SeedAppRoles(ApplicationDbContext database)
         {
             var roles = database.Roles.ToList();
@@ -52,6 +56,49 @@ namespace TestingFramework.Extensions
             }
 
             database.SaveChanges();
+        }
+
+        public static UserInfoModel UpdateUserRole(ApplicationDbContext database, ClaimsPrincipal user, RoleType roleType)
+        {
+            var userID = Utils.GetUserID(user);
+
+            var userInfo = database.UserInfos.FirstOrDefault(u => u.UserID == userID);
+            var role = database.Roles.FirstOrDefault(r => r.Type == roleType);
+
+            if (userInfo == null && Utils.ValidateGuid(userID))
+            {
+                userInfo = new UserInfoModel
+                {
+                    UserID = userID, 
+                    RoleID = role.ID
+                };
+
+                database.UserInfos.Add(userInfo);
+            }
+            else
+            {
+                userInfo.RoleID = role.ID;
+
+                database.Update(userInfo);
+            }
+
+            database.SaveChanges();
+
+            return userInfo;
+        }
+
+        public static UserInfoModel GetUserInfo(ApplicationDbContext database, ClaimsPrincipal user)
+        {
+            var userID = Utils.GetUserID(user);
+
+            var userInfo = database.UserInfos.FirstOrDefault(u => u.UserID == userID);
+
+            if (userInfo == null)
+            {
+                userInfo = UpdateUserRole(database, user, DefaultRoleType);
+            }
+
+            return userInfo;
         }
     }
 }

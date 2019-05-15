@@ -65,14 +65,16 @@ namespace TestingFramework.Extensions
             return Path.Combine(_logsDirectory, $"{day}.log");
         }
 
-        List<ILogEntry> GetExistingEntries(string path)
+        List<LogEntryModel> GetExistingEntries(string path)
         {
             if (!File.Exists(path))
             {
-                return new List<ILogEntry>();
+                return new List<LogEntryModel>();
             }
 
-            return JsonConvert.DeserializeObject<List<ILogEntry>>(path);
+            var contents = File.ReadAllText(path);
+
+            return JsonConvert.DeserializeObject<List<LogEntryModel>>(contents);
         }
     }
 }
