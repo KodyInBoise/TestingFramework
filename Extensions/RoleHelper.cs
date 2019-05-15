@@ -60,29 +60,22 @@ namespace TestingFramework.Extensions
 
         public static UserInfoModel UpdateUserRole(ApplicationDbContext database, ClaimsPrincipal user, RoleType roleType)
         {
-            var userID = Utils.GetUserID(user);
+            var userInfo = GetUserInfo(database, user);
+            var userRole = database.Roles.Find(userInfo.RoleID);
 
-            var userInfo = database.UserInfos.FirstOrDefault(u => u.UserID == userID);
-            var role = database.Roles.FirstOrDefault(r => r.Type == roleType);
-
-            if (userInfo == null && Utils.ValidateGuid(userID))
+            if (userRole.Type == roleType)
             {
-                userInfo = new UserInfoModel
-                {
-                    UserID = userID, 
-                    RoleID = role.ID
-                };
-
-                database.UserInfos.Add(userInfo);
-            }
-            else
-            {
-                userInfo.RoleID = role.ID;
-
-                database.Update(userInfo);
+                return userInfo;
             }
 
+            var newRole = database.Roles.FirstOrDefault(r => r.Type == roleType);
+
+            userInfo.RoleID = newRole.ID;
+
+            database.UserInfos.Update(userInfo);
             database.SaveChanges();
+
+            LoggingUtil.AddEntry(user.Identity.Name, $"User role changed from {userRole.Name} to {newRole.Name}");
 
             return userInfo;
         }
@@ -95,7 +88,18 @@ namespace TestingFramework.Extensions
 
             if (userInfo == null)
             {
-                userInfo = UpdateUserRole(database, user, DefaultRoleType);
+                var defaultRole = database.Roles.FirstOrDefault(r => r.Type == DefaultRoleType);
+
+                userInfo = new UserInfoModel
+                {
+                    UserID = userID,
+                    RoleID = defaultRole.ID
+                };
+
+                database.UserInfos.Add(userInfo);
+                database.SaveChanges();
+
+                LoggingUtil.AddEntry(user.Identity.Name, "New user info added with default role.");
             }
 
             return userInfo;
