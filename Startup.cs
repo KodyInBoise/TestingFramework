@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using TestingFramework.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using TestingFramework.Extensions;
 
 namespace TestingFramework
 {
@@ -70,6 +71,10 @@ namespace TestingFramework
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+
+            LoggingUtil.Initialize();
+            LoggingUtil.AddEntry("APP", "Application started up");
         }
     }
 }

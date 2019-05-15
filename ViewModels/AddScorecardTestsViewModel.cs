@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TestingFramework.Interfaces;
 using TestingFramework.Models;
 
 namespace TestingFramework.ViewModels

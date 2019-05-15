@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace TestingFramework.Models
+namespace TestingFramework.Interfaces
 {
     public interface IScorecardResult
     {

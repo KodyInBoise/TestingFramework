@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace TestingFramework.Models
+namespace TestingFramework.Interfaces
 {
-    public interface IHistoryEntry
+    public interface ILogEntry
     {
-        Guid ID { get; set; }
         DateTime Timestamp { get; set; }
-        string Body { get; set; }
+        string UserName { get; set; }
+        string Content { get; set; }
     }
 }
