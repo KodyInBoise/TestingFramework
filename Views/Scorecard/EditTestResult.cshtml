@@ -63,7 +63,8 @@
 </div>
 <br />
 <div class="form-group">
-    @Html.ActionLink("Back to Progress", "Progress", new { id = Model.Result.ProgressID }, new { @class = "btn btn-secondary", @style = "float:left" })
+    @Html.ActionLink("Back to Progress", "Progress", new { id = Model.Result.ProgressID, categoryID = Model.Result.CategoryID },
+        new { @class = "btn btn-secondary", @style = "float:left" })
 </div>
 <br />
 <hr />
