@@ -157,9 +157,10 @@ namespace TestingFramework.Extensions
                 if (percentage < 1)
                 {
                     var percentageString = percentage.ToString().Split('.')[1];
-                    if (percentageString.Length == 1)
+                    
+                    if (percentageString.ElementAt(0) == '0')
                     {
-                        percentageString += "0";
+                        percentageString = percentageString.Substring(1, 1);
                     }
 
                     return $"{percentageString}%";

@@ -25,8 +25,8 @@ namespace TestingFramework.Controllers
         {
             var viewModel = new TasksHomeViewModel
             {
-                AvailableTasks = _database.Tasks.Where(t => (t.Owner == null || t.Owner == default(Guid)) && t.Status != Strings.Status.Closed),
-                UserTasks = _database.Tasks.Where(t => t.Owner == Utils.GetUserID(User) && t.Status == Strings.Status.Open)
+                AvailableTasks = _database.Tasks.Where(t => (t.Owner == null || t.Owner == default(Guid)) && t.Status != Strings.TaskStatus.Closed),
+                UserTasks = _database.Tasks.Where(t => t.Owner == Utils.GetUserID(User) && t.Status == Strings.TaskStatus.Open)
             };
 
             return View(viewModel);
@@ -50,7 +50,7 @@ namespace TestingFramework.Controllers
             {
                 Created = DateTime.Now,
                 CreatedBy = User.Identity.Name,
-                Status = Strings.Status.Open,
+                Status = Strings.TaskStatus.Open,
                 Description = viewModel.Description,
                 Owner = viewModel.SelectedOwner,
                 History = new List<TaskHistoryModel>()
@@ -76,9 +76,9 @@ namespace TestingFramework.Controllers
 
             var statusOptions = new List<string>()
             {
-                Strings.Status.Open,
-                Strings.Status.Closed,
-                Strings.Status.InProgress
+                Strings.TaskStatus.Open,
+                Strings.TaskStatus.Closed,
+                Strings.TaskStatus.InProgress
             };
 
             var owner = _database.AspNetUsers.FirstOrDefault(u => u.Id == task.Owner.ToString());
@@ -100,7 +100,7 @@ namespace TestingFramework.Controllers
                 CommentBody = "",
             };
 
-            if (task.Status == Strings.Status.Closed && viewHistory == null)
+            if (task.Status == Strings.TaskStatus.Closed && viewHistory == null)
             {
                 viewModel.ViewHistory = true;
             }
@@ -133,7 +133,7 @@ namespace TestingFramework.Controllers
         [HttpPost]
         public IActionResult Details(TaskDetailsViewModel viewModel)
         {
-            if (viewModel.Task.Status == Strings.Status.Closed)
+            if (viewModel.Task.Status == Strings.TaskStatus.Closed)
                 viewModel.Task.Completed = DateTime.Now;
 
             if (viewModel.AddComment && !string.IsNullOrEmpty(viewModel.CommentBody))
@@ -166,7 +166,7 @@ namespace TestingFramework.Controllers
         {
             var viewModel = new ClosedTasksViewModel
             {
-                ClosedTasks = _database.Tasks.Where(t => t.Status == Strings.Status.Closed),
+                ClosedTasks = _database.Tasks.Where(t => t.Status == Strings.TaskStatus.Closed),
                 UserNames = new Dictionary<Guid, string>()
             };
 
