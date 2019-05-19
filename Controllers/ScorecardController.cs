@@ -39,7 +39,7 @@ namespace TestingFramework.Controllers
         }
 
         [HttpGet]
-        public IActionResult Progress(Guid id)
+        public IActionResult Progress(Guid id, Guid categoryID = default(Guid))
         {
             var progress = _database.ScorecardsInProgress.Find(id);
 
@@ -55,7 +55,8 @@ namespace TestingFramework.Controllers
                 Progress = progress,
                 Scorecard = scorecard,
                 Categories = categories,
-                CategoryCompletePercentages = new Dictionary<Guid, string>()
+                CategoryCompletePercentages = new Dictionary<Guid, string>(),
+                ScrollToDiv = Utils.ValidateGuid(categoryID) ? $"category-{categoryID}" : ""
             };
 
             var results = progress.GetResults();
@@ -141,17 +142,22 @@ namespace TestingFramework.Controllers
         }
 
         [HttpGet]
-        public IActionResult UpdateTestResult(Guid progressID, Guid testID, bool passed, string notes)
+        public IActionResult UpdateTestResult(Guid progressID, Guid testID, bool passed)
         {
             var progress = _database.ScorecardsInProgress.Find(progressID);
             var categoryID = _database.ScorecardTests.FirstOrDefault(t => t.ID == testID).CategoryID;
 
-            progress.AddOrUpdateResult(testID, categoryID, passed, notes);
+            progress.AddOrUpdateResult(testID, categoryID, passed);
 
             _database.ScorecardsInProgress.Update(progress);
             _database.SaveChanges();
 
-            return RedirectToAction("EditTestResult", new { id = progressID, testID = testID });
+            if (!passed)
+            {
+                return RedirectToAction("EditTestResult", new { id = progressID, testID = testID });
+            }
+
+            return RedirectToAction("Progress", new { id = progressID, categoryID = categoryID });
         }
 
         [HttpGet]
@@ -241,13 +247,36 @@ namespace TestingFramework.Controllers
                 };
             }
 
+            var statusOptions = new List<string>()
+            {
+                Strings.TestStatus.Passed,
+                Strings.TestStatus.Failed,
+                Strings.TestStatus.NotStarted,
+            };
+            statusOptions.Remove(Strings.TestStatus.GetString(result.Passed));
+
             var viewModel = new EditTestResultViewModel
             {
                 Test = test,
                 Result = result,
+                StatusOptions = new SelectList(statusOptions),
+                SelectedStatus = Strings.TestStatus.GetString(result.Passed)
             };
 
             return View(viewModel);
+        }
+
+        [HttpPost]
+        public IActionResult EditTestResult(EditTestResultViewModel viewModel)
+        {
+
+            var progress = _database.ScorecardsInProgress.Find(viewModel.Result.ProgressID);
+            progress.AddOrUpdateResult(viewModel.Test.ID, viewModel.Test.CategoryID, Strings.TestStatus.FromString(viewModel.SelectedStatus) ?? false, viewModel.Result.Notes);
+
+            _database.ScorecardsInProgress.Update(progress);
+            _database.SaveChanges();
+
+            return RedirectToAction("Progress", new { id = viewModel.Result.ProgressID, categoryID = viewModel.Test.CategoryID });
         }
 
         [HttpGet]
@@ -261,7 +290,7 @@ namespace TestingFramework.Controllers
             if (progress == null || scorecard == null)
             {
                 return NotFound();
-            } 
+            }
 
             var viewModel = new ProgressDetailsViewModel
             {

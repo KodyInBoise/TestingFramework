@@ -28,7 +28,7 @@ namespace TestingFramework.Controllers
                 Scorecards = _database.Scorecards.ToList(),
                 ScorecardsInProgress = _database.ScorecardsInProgress.ToList(),
                 ScorecardTests = _database.ScorecardTests.ToList(),
-                UserTasks = _database.Tasks.Where(t => t.Owner == Utils.GetUserID(User) && t.Status == Strings.Status.Open)
+                UserTasks = _database.Tasks.Where(t => t.Owner == Utils.GetUserID(User) && t.Status == Strings.TaskStatus.Open)
             };
 
             foreach(var scorecard in viewModel.Scorecards)
@@ -45,8 +45,10 @@ namespace TestingFramework.Controllers
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        public IActionResult Error(Exception ex)
         {
+            LoggingUtil.AddEntry("EXCEPTION", ex.Message);
+
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 

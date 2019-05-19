@@ -4,6 +4,8 @@
     ViewData["Title"] = "Progress";
 }
 
+<script src="http://code.jquery.com/jquery-1.9.1.js" type="text/javascript"></script>
+
 <style>
     .h3-btn {
         width: 150px;
@@ -14,11 +16,17 @@
         width: 100px;
     }
 
-    .header{
+    .header {
         text-align: center
     }
-    
 </style>
+
+<script type="text/javascript">
+    var scrollToDiv = '@Model.ScrollToDiv';
+    console.log("Scrolling to div " + scrollToDiv);
+
+    window.location.hash = scrollToDiv;
+</script>
 
 <h1>Scorecard Progress Overview</h1>
 <hr />
@@ -79,41 +87,47 @@
     var categoryTests = Model.Scorecard.Tests.Where(t => t.CategoryID == category.ID);
     var defaultTest = categoryTests.FirstOrDefault();
     var categoryCompletion = Model.CategoryCompletePercentages.GetValueOrDefault(category.ID);
+    var categoryDivID = $"category-{category.ID}";
 
-    <h3 style="float:left">@category.Name</h3>
-    @Html.ActionLink("Start", "CategoryTests", new { id=Model.Progress.ID, categoryID = category.ID }, new { @class = "btn btn-success h3-btn", @style = "float:right" })
-    <table class="table text-col">
-        <thead>
-            <tr>
-                <th width="50%">
-                    Description
-                </th>
-                <th width="25%">
-                    Status
-                </th>
-                <th style="text-align:right" width="25%">
-                    @categoryCompletion Complete
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in categoryTests)
-            {
-                var testStatus = Model.GetTestStatus(item.ID);
+    <div id='@categoryDivID'>
+        <h3 style="float:left">@category.Name</h3>
+        <!-- @Html.ActionLink("Start", "CategoryTests", new { id=Model.Progress.ID, categoryID = category.ID }, new { @class = "btn btn-success h3-btn", @style = "float:right" }) -->
+        <table class="table text-col">
+            <thead>
                 <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Description)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => testStatus)
-                    </td>
-                    <td>
-                        @Html.ActionLink("Edit", "EditTestResult", new { id = Model.Progress.ID, testID = item.ID }, new { @class = "btn btn-secondary btn-sm row-btn", @style = "float:right" })
-                    </td>
+                    <th width="65%">
+                        Description
+                    </th>
+                    <th width="13%">
+                        Status
+                    </th>
+                    <th style="text-align:right" width="22%">
+                        @categoryCompletion Complete
+                    </th>
                 </tr>
-            }
-        </tbody>
-    </table>
-    <br />
-    <br />
+            </thead>
+            <tbody>
+                @foreach (var item in categoryTests)
+                {
+                    var testStatus = Model.GetTestStatus(item.ID);
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => testStatus)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Fail", "UpdateTestResult", new { progressID = Model.Progress.ID, testID = item.ID, passed = false },
+                                new { @class = "btn btn-danger btn-sm row-btn", @style = "float:left" })
+                            @Html.ActionLink("Pass", "UpdateTestResult", new { progressID = Model.Progress.ID, testID = item.ID, passed = true },
+                                new { @class = "btn btn-success btn-sm row-btn", @style = "float:right" })
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <br />
+        <br />
+    </div>
 }

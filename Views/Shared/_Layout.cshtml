@@ -1,6 +1,10 @@
 ﻿@using Microsoft.AspNetCore.Identity
+@using TestingFramework.Data
+@using TestingFramework.Extensions
+
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
+@inject ApplicationDbContext Database
 
 <!DOCTYPE html>
 <html>
@@ -44,6 +48,16 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Setup" asp-action="Index">Setup</a>
                             </li>
+
+                            var userInfo = RoleHelper.GetUserInfo(Database, User);
+                            var userRole = Database.Roles.Find(userInfo.RoleID);
+
+                            if (userRole.Type == RoleType.Admin)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Index">Admin</a>
+                                </li>
+                            }
                         }
                     </ul>
                 </div>

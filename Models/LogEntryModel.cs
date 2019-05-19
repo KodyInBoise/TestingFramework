@@ -11,5 +11,11 @@ namespace TestingFramework.Models
         public DateTime Timestamp { get; set; }
         public string UserName { get; set; }
         public string Content { get; set; }
+
+
+        public override string ToString()
+        {
+            return $"{Timestamp} | {UserName} | {Content}";
+        }
     }
 }

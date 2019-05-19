@@ -26,5 +26,7 @@ namespace TestingFramework.Data
         public DbSet<TaskHistoryModel> TaskHistory { get; set; }
         public DbSet<TaskCommentModel> TaskComments { get; set; }
         public DbSet<IdentityUser> AspNetUsers { get; set; }
+        public DbSet<RoleModel> Roles { get; set; }
+        public DbSet<UserInfoModel> UserInfos { get; set; }
     }
 }

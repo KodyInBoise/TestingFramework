@@ -13,6 +13,8 @@ namespace TestingFramework.ViewModels.Scorecard
         public ScorecardModel Scorecard { get; set; }
         public IEnumerable<CategoryModel> Categories { get; set; }
         public Dictionary<Guid, string> CategoryCompletePercentages { get; set; }
+        public string ScrollToDiv { get; set; }
+
 
         public string GetCategoryName(Guid id)
         {
