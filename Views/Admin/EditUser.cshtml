@@ -1,0 +1,49 @@
+﻿@model TestingFramework.ViewModels.Admin.EditUserViewModel
+
+@{
+    ViewData["Title"] = "Edit User";
+}
+
+<style>
+    .role-dropdown {
+        width: 200px;
+    }
+
+    .action-btn {
+        width: 125px;
+    }
+</style>
+
+<h1>Edit User</h1>
+<hr />
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EditUser">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <dl class="row">
+                <dt class="col-sm-5">
+                    Name:
+                </dt>
+                <dd class="col-sm-7">
+                    @Html.DisplayFor(model => Model.UserInfo.Name)
+                </dd>
+                <dt class="col-sm-5">
+                    Last Activity:
+                </dt>
+                <dd class="col-sm-7">
+                    @Html.DisplayFor(model => Model.UserInfo.LastActivity)
+                </dd>
+                <dt class="col-sm-5" style="margin-top: 10px">
+                    Role:
+                </dt>
+                <dd class="col-sm-7" style="margin-top: 10px">
+                    @Html.DropDownListFor(model => Model.SelectedRole, Model.RoleOptions, Model.SelectedRole.Name, new { @class = "role-dropdown" })
+                </dd>
+            </dl>
+
+            <input type="submit" value="Update" class="btn btn-sm btn-success action-btn" style="float: right"/>
+        </form>
+    </div>
+</div>
+

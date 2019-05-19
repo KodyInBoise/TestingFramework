@@ -93,14 +93,28 @@ namespace TestingFramework.Extensions
                 userInfo = new UserInfoModel
                 {
                     UserID = userID,
-                    RoleID = defaultRole.ID
+                    RoleID = defaultRole.ID,
+                    Name = user.Identity.Name,
+                    LastActivity = DateTime.Now
                 };
 
                 database.UserInfos.Add(userInfo);
-                database.SaveChanges();
 
                 LoggingUtil.AddEntry(user.Identity.Name, "New user info added with default role.");
             }
+            else
+            {
+                if (string.IsNullOrEmpty(userInfo.Name))
+                {
+                    userInfo.Name = user.Identity.Name;
+                }
+
+                userInfo.LastActivity = DateTime.Now;
+
+                database.UserInfos.Update(userInfo);
+            }
+
+            database.SaveChanges();
 
             return userInfo;
         }
