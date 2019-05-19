@@ -40,7 +40,7 @@ namespace TestingFramework.Models
             ResultsJson = JsonConvert.SerializeObject(_resultsList);
         }
 
-        public void AddOrUpdateResult(Guid testID, Guid categoryID, bool passed, string notes)
+        public void AddOrUpdateResult(Guid testID, Guid categoryID, bool passed, string notes = "")
         {
             var result = new ScorecardTestResultModel
             {

@@ -141,17 +141,22 @@ namespace TestingFramework.Controllers
         }
 
         [HttpGet]
-        public IActionResult UpdateTestResult(Guid progressID, Guid testID, bool passed, string notes)
+        public IActionResult UpdateTestResult(Guid progressID, Guid testID, bool passed)
         {
             var progress = _database.ScorecardsInProgress.Find(progressID);
             var categoryID = _database.ScorecardTests.FirstOrDefault(t => t.ID == testID).CategoryID;
 
-            progress.AddOrUpdateResult(testID, categoryID, passed, notes);
+            progress.AddOrUpdateResult(testID, categoryID, passed);
 
             _database.ScorecardsInProgress.Update(progress);
             _database.SaveChanges();
 
-            return RedirectToAction("EditTestResult", new { id = progressID, testID = testID });
+            if (!passed)
+            {
+                return RedirectToAction("EditTestResult", new { id = progressID, testID = testID });
+            }
+
+            return RedirectToAction("Progress", new { id = progressID });
         }
 
         [HttpGet]

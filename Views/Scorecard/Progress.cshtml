@@ -81,17 +81,17 @@
     var categoryCompletion = Model.CategoryCompletePercentages.GetValueOrDefault(category.ID);
 
     <h3 style="float:left">@category.Name</h3>
-    @Html.ActionLink("Start", "CategoryTests", new { id=Model.Progress.ID, categoryID = category.ID }, new { @class = "btn btn-success h3-btn", @style = "float:right" })
+    <!-- @Html.ActionLink("Start", "CategoryTests", new { id=Model.Progress.ID, categoryID = category.ID }, new { @class = "btn btn-success h3-btn", @style = "float:right" }) -->
     <table class="table text-col">
         <thead>
             <tr>
-                <th width="50%">
+                <th width="65%">
                     Description
                 </th>
-                <th width="25%">
+                <th width="13%">
                     Status
                 </th>
-                <th style="text-align:right" width="25%">
+                <th style="text-align:right" width="22%">
                     @categoryCompletion Complete
                 </th>
             </tr>
@@ -108,7 +108,10 @@
                         @Html.DisplayFor(modelItem => testStatus)
                     </td>
                     <td>
-                        @Html.ActionLink("Edit", "EditTestResult", new { id = Model.Progress.ID, testID = item.ID }, new { @class = "btn btn-secondary btn-sm row-btn", @style = "float:right" })
+                        @Html.ActionLink("Fail", "UpdateTestResult", new { progressID = Model.Progress.ID, testID = item.ID, passed = false },
+                            new { @class = "btn btn-danger btn-sm row-btn", @style = "float:left" })
+                        @Html.ActionLink("Pass", "UpdateTestResult", new { progressID = Model.Progress.ID, testID = item.ID, passed = true },
+                            new { @class = "btn btn-success btn-sm row-btn", @style = "float:right" })
                     </td>
                 </tr>
             }
