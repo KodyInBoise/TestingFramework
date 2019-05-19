@@ -28,7 +28,7 @@ namespace TestingFramework.Controllers
                 Scorecards = _database.Scorecards.ToList(),
                 ScorecardsInProgress = _database.ScorecardsInProgress.ToList(),
                 ScorecardTests = _database.ScorecardTests.ToList(),
-                UserTasks = _database.Tasks.Where(t => t.Owner == Utils.GetUserID(User) && t.Status == Strings.Status.Open)
+                UserTasks = _database.Tasks.Where(t => t.Owner == Utils.GetUserID(User) && t.Status == Strings.TaskStatus.Open)
             };
 
             foreach(var scorecard in viewModel.Scorecards)

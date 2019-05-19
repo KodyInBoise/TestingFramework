@@ -34,7 +34,7 @@ namespace TestingFramework.ViewModels.Tasks
 
         public bool IsClosed()
         {
-            return Task.Status == Strings.Status.Closed;
+            return Task.Status == Strings.TaskStatus.Closed;
         }
 
         public bool HasHowner()

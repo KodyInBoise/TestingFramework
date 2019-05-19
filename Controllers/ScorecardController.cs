@@ -247,10 +247,20 @@ namespace TestingFramework.Controllers
                 };
             }
 
+            var statusOptions = new List<string>()
+            {
+                Strings.TestStatus.Passed,
+                Strings.TestStatus.Failed,
+                Strings.TestStatus.NotStarted,
+            };
+            statusOptions.Remove(Strings.TestStatus.GetString(result.Passed));
+
             var viewModel = new EditTestResultViewModel
             {
                 Test = test,
                 Result = result,
+                StatusOptions = new SelectList(statusOptions),
+                SelectedStatus = Strings.TestStatus.GetString(result.Passed)
             };
 
             return View(viewModel);
@@ -259,8 +269,9 @@ namespace TestingFramework.Controllers
         [HttpPost]
         public IActionResult EditTestResult(EditTestResultViewModel viewModel)
         {
+
             var progress = _database.ScorecardsInProgress.Find(viewModel.Result.ProgressID);
-            progress.AddOrUpdateResult(viewModel.Test.ID, viewModel.Test.CategoryID, viewModel.Result.Passed ?? false, viewModel.Result.Notes);
+            progress.AddOrUpdateResult(viewModel.Test.ID, viewModel.Test.CategoryID, Strings.TestStatus.FromString(viewModel.SelectedStatus) ?? false, viewModel.Result.Notes);
 
             _database.ScorecardsInProgress.Update(progress);
             _database.SaveChanges();
@@ -279,7 +290,7 @@ namespace TestingFramework.Controllers
             if (progress == null || scorecard == null)
             {
                 return NotFound();
-            } 
+            }
 
             var viewModel = new ProgressDetailsViewModel
             {
