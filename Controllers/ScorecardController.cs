@@ -256,6 +256,18 @@ namespace TestingFramework.Controllers
             return View(viewModel);
         }
 
+        [HttpPost]
+        public IActionResult EditTestResult(EditTestResultViewModel viewModel)
+        {
+            var progress = _database.ScorecardsInProgress.Find(viewModel.Result.ProgressID);
+            progress.AddOrUpdateResult(viewModel.Test.ID, viewModel.Test.CategoryID, viewModel.Result.Passed ?? false, viewModel.Result.Notes);
+
+            _database.ScorecardsInProgress.Update(progress);
+            _database.SaveChanges();
+
+            return RedirectToAction("Progress", new { id = viewModel.Result.ProgressID, categoryID = viewModel.Test.CategoryID });
+        }
+
         [HttpGet]
         [Route("Scorecard/ProgressDetails/{id}")]
         public IActionResult ProgressDetails(Guid id)

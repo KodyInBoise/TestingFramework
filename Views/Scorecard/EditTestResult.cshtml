@@ -6,7 +6,7 @@
 
 <style>
     .action-btn {
-        width: 100px;
+        width: 125px;
     }
 
     .entry-text {
@@ -18,79 +18,73 @@
 <h1>Edit Test Result</h1>
 <hr />
 
-<div>
-    <dl class="row">
-        <dt class="col-sm-2">
-            Description:
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => Model.Test.Description)
-        </dd>
-        <dt class="col-sm-2">
-            Expected Result:
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => Model.Test.ExpectedResult)
-        </dd>
-        <dt class="col-sm-2">
-            Scorecard Value:
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => Model.Test.Value)
-        </dd>
-        <dt class="col-sm-2">
-            Status:
-        </dt>
-        <dd class="col-sm-10">
-            @{ 
-                var statusString = "";
-                if (Model.Result.Passed == null)
-                {
-                    statusString = "Not Started";
+<form asp-action="EditTestResult">
+    <div asp-validation-summary="None" class="text-danger"></div>
+    <div>
+        @Html.HiddenFor(model => model.Test.ID)
+        @Html.HiddenFor(model => model.Test.CategoryID)
+        @Html.HiddenFor(model => Model.Test.Value)
+        <dl class="row">
+            <dt class="col-sm-2">
+                Description:
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => Model.Test.Description)
+            </dd>
+            <dt class="col-sm-2">
+                Expected Result:
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => Model.Test.ExpectedResult)
+            </dd>
+            <dt class="col-sm-2">
+                Status:
+            </dt>
+            <dd class="col-sm-10">
+                @{
+                    var statusString = "";
+                    if (Model.Result.Passed == null)
+                    {
+                        statusString = "Not Started";
+                    }
+                    else if (Model.Result.Passed == true)
+                    {
+                        statusString = "Passed";
+                    }
+                    else if (Model.Result.Passed == false)
+                    {
+                        statusString = "Failed";
+                    }
                 }
-                else if (Model.Result.Passed == true)
-                {
-                    statusString = "Passed";
-                }
-                else if (Model.Result.Passed == false)
-                {
-                    statusString = "Failed";
-                }
-            }
-            @Html.DisplayFor(model => statusString)
-        </dd>
-    </dl>
-</div>
-<br />
-<div class="form-group">
-    @Html.ActionLink("Back to Progress", "Progress", new { id = Model.Result.ProgressID, categoryID = Model.Result.CategoryID },
-        new { @class = "btn btn-secondary", @style = "float:left" })
-</div>
-<br />
-<hr />
-<br />
+                @Html.DisplayFor(model => statusString)
+            </dd>
+        </dl>
+    </div>
+    <br />
+    <div class="form-group">
+        @Html.ActionLink("Back to Progress", "Progress", new { id = Model.Result.ProgressID, categoryID = Model.Result.CategoryID },
+            new { @class = "btn btn-secondary", @style = "float:left" })
+    </div>
+    <br />
+    <hr />
+    <br />
 
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="EditTestResult">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="row">
+        <div class="col-md-6">
             @Html.HiddenFor(model => Model.Result.ProgressID)
             @Html.HiddenFor(model => Model.Result.CategoryID)
             @Html.HiddenFor(model => Model.Result.TestID)
-            @Html.HiddenFor(model => Model.Result.Passed)
             <div class="form-group">
-                @Html.LabelFor(model => Model.Result.Notes)
+                <strong><label>Notes</label></strong>
+                <br />
                 @Html.TextAreaFor(model => Model.Result.Notes, new { @class = "entry-text" })
             </div>
             <div class="form-group">
-                @Html.ActionLink("Fail", "UpdateTestResult", new { progressID = Model.Result.ProgressID, testID = Model.Result.TestID,
-                    passed = false, notes = Model.Result.Notes }, new { @class = "btn btn-sm btn-danger action-btn", @style="float:left" })
-                @Html.ActionLink("Pass", "UpdateTestResult", new { progressID = Model.Result.ProgressID, testID = Model.Result.TestID,
-                    passed = true, notes = Model.Result.Notes }, new { @class = "btn btn-sm btn-success action-btn", @style="float:right" })
+                <input type="submit" value="Update" class="btn btn-success action-btn" style="float: right" />
             </div>
-        </form>
+        </div>
     </div>
-</div>
+</form>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

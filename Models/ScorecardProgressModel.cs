@@ -22,7 +22,7 @@ namespace TestingFramework.Models
         [NotMapped]
         List<ScorecardTestResultModel> _resultsList { get; set; }
 
-        public void AddOrUpdateResult(ScorecardTestResultModel result)
+        void AddOrUpdateResult(ScorecardTestResultModel result)
         {
             _resultsList = GetResults();
 
@@ -35,6 +35,7 @@ namespace TestingFramework.Models
             else
             {
                 existing.Passed = result.Passed;
+                existing.Notes = result.Notes;
             }
 
             ResultsJson = JsonConvert.SerializeObject(_resultsList);
@@ -42,16 +43,31 @@ namespace TestingFramework.Models
 
         public void AddOrUpdateResult(Guid testID, Guid categoryID, bool passed, string notes = "")
         {
-            var result = new ScorecardTestResultModel
-            {
-                ProgressID = ID,
-                TestID = testID,
-                CategoryID = categoryID,
-                Passed = passed,
-                Notes = notes
-            };
+            _resultsList = GetResults();
 
-            AddOrUpdateResult(result);
+            var existing = _resultsList.FirstOrDefault(r => r.TestID == testID);
+
+            if (existing == null)
+            {
+                var result = new ScorecardTestResultModel
+                {
+                    ProgressID = ID,
+                    TestID = testID,
+                    CategoryID = categoryID,
+                    Passed = passed,
+                };
+
+                _resultsList.Add(result);
+            }
+            else
+            {
+                existing.Passed = passed;
+
+                if (!string.IsNullOrEmpty(notes))
+                    existing.Notes = notes;
+            }
+
+            ResultsJson = JsonConvert.SerializeObject(_resultsList);
         }
 
         public List<ScorecardTestResultModel> GetResults()
