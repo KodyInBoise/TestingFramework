@@ -39,7 +39,7 @@ namespace TestingFramework.Controllers
         }
 
         [HttpGet]
-        public IActionResult Progress(Guid id)
+        public IActionResult Progress(Guid id, Guid categoryID = default(Guid))
         {
             var progress = _database.ScorecardsInProgress.Find(id);
 
@@ -55,7 +55,8 @@ namespace TestingFramework.Controllers
                 Progress = progress,
                 Scorecard = scorecard,
                 Categories = categories,
-                CategoryCompletePercentages = new Dictionary<Guid, string>()
+                CategoryCompletePercentages = new Dictionary<Guid, string>(),
+                ScrollToDiv = Utils.ValidateGuid(categoryID) ? $"category-{categoryID}" : ""
             };
 
             var results = progress.GetResults();
@@ -156,7 +157,7 @@ namespace TestingFramework.Controllers
                 return RedirectToAction("EditTestResult", new { id = progressID, testID = testID });
             }
 
-            return RedirectToAction("Progress", new { id = progressID });
+            return RedirectToAction("Progress", new { id = progressID, categoryID = categoryID });
         }
 
         [HttpGet]
