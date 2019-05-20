@@ -158,8 +158,14 @@ namespace TestingFramework.Extensions
                 {
                     var percentageString = percentage.ToString().Split('.')[1];
                     
-                    if (percentageString.ElementAt(0) == '0')
+                    if (percentageString.Length == 1)
                     {
+                        // when percentage is a whole number like 1, display extra 0 for 10%
+                        percentageString += "0";
+                    }
+                    else if (percentageString.ElementAt(0) == '0')
+                    {
+                        // scrub leading 0 if less than 10%
                         percentageString = percentageString.Substring(1, 1);
                     }
 
