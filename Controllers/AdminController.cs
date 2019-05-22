@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using TestingFramework.Data;
 using TestingFramework.Extensions;
+using TestingFramework.Models;
 using TestingFramework.ViewModels.Admin;
 
 namespace TestingFramework.Controllers
@@ -51,6 +52,21 @@ namespace TestingFramework.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
+            var identityUsers = _database.AspNetUsers.ToList();
+            var userInfos = new List<UserInfoModel>();
+
+            foreach (var user in identityUsers)
+            {
+                try
+                {
+                    userInfos.Add(RoleHelper.GetUserInfo(_database, Guid.Parse(user.Id)));
+                }
+                catch (Exception ex)
+                {
+                    LoggingUtil.AddException(ex);
+                }
+            }
+
             var viewModel = new UsersViewModel
             {
                 UserInfos = _database.UserInfos.ToList(),
@@ -70,7 +86,7 @@ namespace TestingFramework.Controllers
 
             var roles = _database.Roles.ToList();
 
-            var currentUser = RoleHelper.GetUserInfo(_database, User);
+            var currentUser = RoleHelper.GetContextUserInfo(_database, User);
             var currentUserRole = roles.FirstOrDefault(r => r.ID == currentUser.RoleID);
 
             var viewModel = new EditUserViewModel

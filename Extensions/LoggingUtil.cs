@@ -45,6 +45,18 @@ namespace TestingFramework.Extensions
             _instance.WriteEntry(entry);
         }
 
+        public static void AddException(Exception ex)
+        {
+            var entry = new LogEntryModel
+            {
+                Timestamp = DateTime.Now,
+                UserName = "EXCEPTION",
+                Content = ex.Message
+            };
+
+            _instance.WriteEntry(entry);
+        }
+
         void WriteEntry(LogEntryModel entry)
         {
             var path = GetCurrentLogPath();
