@@ -20,7 +20,10 @@
 <div class="row">
     <div class="col-md-4">
         <form asp-action="EditUser">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div asp-validation-summary="None" class="text-danger"></div>
+            @Html.HiddenFor(model => Model.UserInfo.UserID)
+            @Html.HiddenFor(model => Model.UserInfo.RoleID)
+
             <dl class="row">
                 <dt class="col-sm-5">
                     Name:
@@ -38,11 +41,13 @@
                     Role:
                 </dt>
                 <dd class="col-sm-7" style="margin-top: 10px">
-                    @Html.DropDownListFor(model => Model.SelectedRole, Model.RoleOptions, Model.SelectedRole.Name, new { @class = "role-dropdown" })
+                    @Html.DropDownListFor(model => Model.SelectedRoleID, Model.RoleOptions, Model.CurrentRole.Name, new { @class = "role-dropdown" })
                 </dd>
             </dl>
 
-            <input type="submit" value="Update" class="btn btn-sm btn-success action-btn" style="float: right"/>
+            @Html.ActionLink("Delete", "DeleteUser", new { id = Model.UserInfo.UserID },
+                new { @class = "btn btn-sm btn-danger action-btn", @style = "float: left" })
+            <input type="submit" value="Update" class="btn btn-sm btn-success action-btn" style="float: right" />
         </form>
     </div>
 </div>

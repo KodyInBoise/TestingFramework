@@ -63,6 +63,11 @@ namespace TestingFramework.Controllers
         [HttpGet]
         public IActionResult EditUser(Guid id)
         {
+            if (!RoleHelper.UserIsAdmin(_database, User))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             var roles = _database.Roles.ToList();
 
             var currentUser = RoleHelper.GetUserInfo(_database, User);
@@ -73,8 +78,8 @@ namespace TestingFramework.Controllers
                 UserInfo = _database.UserInfos.Find(id),
             };
 
-            viewModel.SelectedRole = roles.FirstOrDefault(r => r.ID == viewModel.UserInfo.RoleID);
-            roles.Remove(viewModel.SelectedRole);
+            viewModel.CurrentRole = roles.FirstOrDefault(r => r.ID == viewModel.UserInfo.RoleID);
+            roles.Remove(viewModel.CurrentRole);
 
             viewModel.RoleOptions = new SelectList(roles, "ID", "Name");
 
@@ -84,14 +89,42 @@ namespace TestingFramework.Controllers
         [HttpPost]
         public IActionResult EditUser(EditUserViewModel viewModel)
         {
+            if (!RoleHelper.UserIsAdmin(_database, User))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             var user = _database.UserInfos.Find(viewModel.UserInfo.UserID);
 
-            user.RoleID = viewModel.SelectedRole.ID;
+            user.RoleID = viewModel.SelectedRoleID;
 
             _database.UserInfos.Update(user);
             _database.SaveChanges();
 
             return RedirectToAction("Users");
+        }
+
+        [HttpGet]
+        public IActionResult DeleteUser(Guid id)
+        {
+            // This needs to be a confirmation page with deletion on post
+            var userInfo = _database.UserInfos.Find(id);
+            var identityUser = _database.AspNetUsers.Find(id.ToString());
+
+            if (userInfo == null)
+            {
+                return NotFound();
+            }
+
+            if (identityUser != null)
+                _database.AspNetUsers.Remove(identityUser);
+
+            _database.UserInfos.Remove(userInfo);
+            _database.SaveChanges();
+
+            LoggingUtil.AddEntry(User.Identity.Name, $"Deleted user {userInfo.Name}");
+
+            return RedirectToAction("Index");
         }
     }
 }

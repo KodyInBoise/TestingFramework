@@ -12,6 +12,7 @@ namespace TestingFramework.ViewModels.Admin
         public UserInfoModel UserInfo { get; set; }
         public IEnumerable<RoleModel> Roles { get; set; }
         public SelectList RoleOptions { get; set; }
-        public RoleModel SelectedRole { get; set; }
+        public RoleModel CurrentRole { get; set; }
+        public Guid SelectedRoleID { get; set; }
     }
 }
