@@ -1,0 +1,52 @@
+﻿@model TestingFramework.ViewModels.Admin.UsersViewModel
+
+@{
+    ViewData["Title"] = "Users";
+}
+
+<style> 
+    .edit-btn {
+        width: 100px;
+        float: right;
+    }
+</style>
+
+<h1>Users</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th width="35%">
+                <strong>Name</strong>
+            </th>
+            <th width="25%">
+                <strong>Role</strong>
+            </th>
+            <th width="25%">
+                <strong>Last Activity</strong>
+            </th>
+            <th width="15%"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.UserInfos)
+        {
+            var userRole = Model.Roles.FirstOrDefault(r => r.ID == item.RoleID);
+
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => userRole.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastActivity)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "EditUser", new { id = item.UserID }, new { @class = "btn btn-sm btn-primary edit-btn" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -81,7 +81,9 @@ namespace TestingFramework.Extensions
         {
             var path = _instance.GetCurrentLogPath();
 
-            return _instance.GetExistingEntries(path);
+            var entries = _instance.GetExistingEntries(path).OrderBy(e => e.Timestamp);
+
+            return entries.Reverse();
         }
     }
 }
