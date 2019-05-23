@@ -60,7 +60,7 @@ namespace TestingFramework.Extensions
 
         public static UserInfoModel UpdateUserRole(ApplicationDbContext database, ClaimsPrincipal user, RoleType roleType)
         {
-            var userInfo = GetUserInfo(database, user);
+            var userInfo = GetContextUserInfo(database, user);
             var userRole = database.Roles.Find(userInfo.RoleID);
 
             if (userRole.Type == roleType)
@@ -80,7 +80,7 @@ namespace TestingFramework.Extensions
             return userInfo;
         }
 
-        public static UserInfoModel GetUserInfo(ApplicationDbContext database, ClaimsPrincipal user)
+        public static UserInfoModel GetContextUserInfo(ApplicationDbContext database, ClaimsPrincipal user)
         {
             var userID = Utils.GetUserID(user);
 
@@ -93,35 +93,52 @@ namespace TestingFramework.Extensions
                 userInfo = new UserInfoModel
                 {
                     UserID = userID,
-                    RoleID = defaultRole.ID,
-                    Name = user.Identity.Name,
-                    LastActivity = DateTime.Now
+                    RoleID = defaultRole.ID
                 };
 
                 database.UserInfos.Add(userInfo);
+                database.SaveChanges();
 
                 LoggingUtil.AddEntry(user.Identity.Name, "New user info added with default role.");
             }
-            else
-            {
-                if (string.IsNullOrEmpty(userInfo.Name))
-                {
-                    userInfo.Name = user.Identity.Name;
-                }
 
-                userInfo.LastActivity = DateTime.Now;
+            return userInfo;
+        }
+
+        public static UserInfoModel GetUserInfo(ApplicationDbContext database, Guid userID)
+        {
+            var userInfo = database.UserInfos.FirstOrDefault(u => u.UserID == userID);
+
+            if (userInfo == null)
+            {
+                var defaultRole = database.Roles.FirstOrDefault(r => r.Type == DefaultRoleType);
+
+                userInfo = new UserInfoModel
+                {
+                    UserID = userID,
+                    RoleID = defaultRole.ID,
+                    Name = database.AspNetUsers.Find(userID.ToString())?.UserName ?? ""
+                };
+
+                database.UserInfos.Add(userInfo);
+                database.SaveChanges();
+
+                LoggingUtil.AddEntry(userInfo.Name, "New user info added with default role.");
+            }
+            else if (string.IsNullOrEmpty(userInfo.Name))
+            {
+                userInfo.Name = database.AspNetUsers.Find(userInfo.UserID.ToString())?.UserName ?? "";
 
                 database.UserInfos.Update(userInfo);
+                database.SaveChanges();
             }
-
-            database.SaveChanges();
 
             return userInfo;
         }
 
         public static bool UserIsAdmin(ApplicationDbContext database, ClaimsPrincipal user)
         {
-            var userInfo = GetUserInfo(database, user);
+            var userInfo = GetContextUserInfo(database, user);
             var userRole = database.Roles.Find(userInfo.RoleID);
 
             return userRole.Type == RoleType.Admin;

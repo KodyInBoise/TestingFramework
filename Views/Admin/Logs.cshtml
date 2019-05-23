@@ -1,27 +1,31 @@
-﻿@model IEnumerable<TestingFramework.Models.LogEntryModel>
+﻿@model TestingFramework.ViewModels.Admin.LogsViewModel
 
 @{
     ViewData["Title"] = "Logs";
+    var dayString = Model.ViewingDate.ToString("MM/dd/yyyy");
+    var previousDay = Model.ViewingDate.AddDays(-1);
+    var nextDay = Model.ViewingDate.AddDays(1);
 }
 
-<h1>Logs</h1>
+<style>
+    .action-btn {
+        width: 100px;
+    }
+</style>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th width="100%"></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            @{ 
-                var contentString = item.ToString();
-            }
-            <td>
-                @contentString
-            </td>
-        </tr>
+<h1>Logs - @dayString</h1>
+<hr />
+
+@Html.ActionLink(previousDay.ToString("MM/dd/yyyy"), "Logs", new { date = previousDay }, new { @class = "btn btn-sm btn-primary action-btn", @style = "float: left" })
+@if (Model.ViewingDate.ToString("MM/dd/yyy") != DateTime.Now.ToString("MM/dd/yyyy"))
+{
+    @Html.ActionLink(nextDay.ToString("MM/dd/yyyy"), "Logs", new { date = nextDay }, new { @class = "btn btn-sm btn-primary action-btn", @style = "float: right" })
 }
-    </tbody>
-</table>
+<br />
+<hr />
+
+@foreach (var entry in Model.Entries)
+{
+    @entry
+    <hr />
+}

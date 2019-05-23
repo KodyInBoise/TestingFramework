@@ -49,7 +49,7 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Setup" asp-action="Index">Setup</a>
                             </li>
 
-                            var userInfo = RoleHelper.GetUserInfo(Database, User);
+                            var userInfo = RoleHelper.GetContextUserInfo(Database, User);
                             var userRole = Database.Roles.Find(userInfo.RoleID);
 
                             if (userRole.Type == RoleType.Admin)

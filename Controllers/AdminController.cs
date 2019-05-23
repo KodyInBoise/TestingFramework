@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using TestingFramework.Data;
 using TestingFramework.Extensions;
+using TestingFramework.Models;
 using TestingFramework.ViewModels.Admin;
 
 namespace TestingFramework.Controllers
@@ -31,16 +32,22 @@ namespace TestingFramework.Controllers
         }
 
         [HttpGet]
-        public IActionResult Logs()
+        public IActionResult Logs(DateTime date = default(DateTime))
         {
             if (!RoleHelper.UserIsAdmin(_database, User))
             {
                 return RedirectToAction("Index", "Home");
             }
 
-            var entries = LoggingUtil.GetCurrentLogEntries();
+            date = date != default(DateTime) ? date : DateTime.Now;
 
-            return View(entries);
+            var viewModel = new LogsViewModel
+            {
+                ViewingDate = date,
+                Entries = LoggingUtil.GetLogEntries(date)
+            };
+
+            return View(viewModel);
         }
 
         [HttpGet]
@@ -49,6 +56,21 @@ namespace TestingFramework.Controllers
             if (!RoleHelper.UserIsAdmin(_database, User))
             {
                 return RedirectToAction("Index", "Home");
+            }
+
+            var identityUsers = _database.AspNetUsers.ToList();
+            var userInfos = new List<UserInfoModel>();
+
+            foreach (var user in identityUsers)
+            {
+                try
+                {
+                    userInfos.Add(RoleHelper.GetUserInfo(_database, Guid.Parse(user.Id)));
+                }
+                catch (Exception ex)
+                {
+                    LoggingUtil.AddException(ex);
+                }
             }
 
             var viewModel = new UsersViewModel
@@ -70,7 +92,7 @@ namespace TestingFramework.Controllers
 
             var roles = _database.Roles.ToList();
 
-            var currentUser = RoleHelper.GetUserInfo(_database, User);
+            var currentUser = RoleHelper.GetContextUserInfo(_database, User);
             var currentUserRole = roles.FirstOrDefault(r => r.ID == currentUser.RoleID);
 
             var viewModel = new EditUserViewModel
@@ -124,7 +146,7 @@ namespace TestingFramework.Controllers
 
             LoggingUtil.AddEntry(User.Identity.Name, $"Deleted user {userInfo.Name}");
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Users");
         }
     }
 }
