@@ -32,16 +32,22 @@ namespace TestingFramework.Controllers
         }
 
         [HttpGet]
-        public IActionResult Logs()
+        public IActionResult Logs(DateTime date = default(DateTime))
         {
             if (!RoleHelper.UserIsAdmin(_database, User))
             {
                 return RedirectToAction("Index", "Home");
             }
 
-            var entries = LoggingUtil.GetCurrentLogEntries();
+            date = date != default(DateTime) ? date : DateTime.Now;
 
-            return View(entries);
+            var viewModel = new LogsViewModel
+            {
+                ViewingDate = date,
+                Entries = LoggingUtil.GetLogEntries(date)
+            };
+
+            return View(viewModel);
         }
 
         [HttpGet]

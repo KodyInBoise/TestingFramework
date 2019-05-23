@@ -59,7 +59,7 @@ namespace TestingFramework.Extensions
 
         void WriteEntry(LogEntryModel entry)
         {
-            var path = GetCurrentLogPath();
+            var path = GetPathForDate(entry.Timestamp);
 
             var entries = GetExistingEntries(path);
             entries.Add(entry);
@@ -70,9 +70,9 @@ namespace TestingFramework.Extensions
             }
         }
 
-        string GetCurrentLogPath()
+        string GetPathForDate(DateTime date)
         {
-            var day = DateTime.Now.ToString("yyyy-dd-MM");
+            var day = date.ToString("yyyy-dd-MM");
 
             return Path.Combine(_logsDirectory, $"{day}.log");
         }
@@ -89,9 +89,11 @@ namespace TestingFramework.Extensions
             return JsonConvert.DeserializeObject<List<LogEntryModel>>(contents);
         }
 
-        public static IEnumerable<ILogEntry> GetCurrentLogEntries()
+        public static IEnumerable<LogEntryModel> GetLogEntries(DateTime date = default(DateTime))
         {
-            var path = _instance.GetCurrentLogPath();
+            date = date != default(DateTime) ? date : DateTime.Now;
+
+            var path = _instance.GetPathForDate(date);
 
             var entries = _instance.GetExistingEntries(path).OrderBy(e => e.Timestamp);
 
