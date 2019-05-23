@@ -140,7 +140,7 @@ namespace TestingFramework.Controllers
 
             LoggingUtil.AddEntry(User.Identity.Name, $"Deleted user {userInfo.Name}");
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Users");
         }
     }
 }
