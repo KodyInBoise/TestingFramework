@@ -36,7 +36,7 @@
     <tbody>
         @foreach (var item in Model.ScorecardsInProgress)
         {
-            var scorecardName = Model.Scorecards.FirstOrDefault(sc => sc.ID == item.ScorecardID).Name;
+            var scorecardName = Model.GetScorecardName(item.ScorecardID);
             var progress = Model.GetProgress(item.ID);
 
             <tr>

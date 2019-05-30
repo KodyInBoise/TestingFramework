@@ -30,9 +30,9 @@ namespace TestingFramework.ViewModels.Scorecard
             return $"{completed} of {total} - {percentage}";
         }
 
-        public string GetTestStatus(Guid testID)
+        public string GetTestStatusString(Guid testID, out bool? passed)
         {
-            var passed = Progress.GetResults().FirstOrDefault(r => r.TestID == testID)?.Passed ?? null;
+            passed = Progress.GetResults().FirstOrDefault(r => r.TestID == testID)?.Passed ?? null;
             
             if (passed == true)
             {
