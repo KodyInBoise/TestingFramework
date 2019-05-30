@@ -13,5 +13,6 @@ namespace TestingFramework.Models
         public string Description { get; set; }
         public string ExpectedResult { get; set; }
         public double Value { get; set; }
+        public int Order { get; set; }
     }
 }

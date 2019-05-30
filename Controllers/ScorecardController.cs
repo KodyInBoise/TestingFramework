@@ -44,7 +44,8 @@ namespace TestingFramework.Controllers
             var progress = _database.ScorecardsInProgress.Find(id);
 
             var scorecard = _database.Scorecards.Find(progress.ScorecardID);
-            scorecard.Tests = _database.ScorecardTests.Where(t => t.ScorecardID == scorecard.ID).ToList();
+            var scorecardTests = _database.ScorecardTests.Where(t => t.ScorecardID == scorecard.ID).ToList();
+            scorecard.Tests = Utils.Ordering.SortScorecardTests(scorecardTests);
 
             var categories = new List<CategoryModel>();
             var categoryIDs = scorecard.Tests.Select(t => t.CategoryID).Distinct().ToList();

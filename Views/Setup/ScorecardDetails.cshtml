@@ -1,4 +1,8 @@
-﻿@model TestingFramework.ViewModels.ScorecardDetailsViewModel
+﻿@model TestingFramework.ViewModels.Setup.ScorecardDetailsViewModel
+
+@using TestingFramework.Data;
+
+@inject ApplicationDbContext _database;
 
 @{
     ViewData["Title"] = "Scorecard Details";
@@ -12,7 +16,30 @@
     .text-col {
         text-align: center;
     }
+
+    .desc-label {
+        font-weight: bold;
+        padding-top: 5px;
+    }
+
+    .order-input {
+        width: 75px;
+        margin-left: 10px;
+    }
+
+    .update-btn {
+        width: 75px;
+        margin-bottom: 3px;
+        margin-left: 5px;
+    }
 </style>
+
+<script type="text/javascript">
+    var scrollToDiv = '@Model.ScrollToDiv';
+    console.log("Scrolling to div " + scrollToDiv);
+
+    window.location.hash = scrollToDiv;
+</script>
 
 <h1>Scorecard Details</h1>
 <hr />
@@ -48,61 +75,55 @@
         </dd>
     </dl>
     <div>
-        @Html.ActionLink("Delete", "DeleteScorecard", new { id = Model.Scorecard.ID }, new { @class = "btn btn-danger btn-sm action-btn", @style="float:left" })
+        @Html.ActionLink("Delete", "DeleteScorecard", new { id = Model.Scorecard.ID }, new { @class = "btn btn-danger btn-sm action-btn", @style = "float:left" })
     </div>
     <div style="float:right">
         @Html.ActionLink("Edit Details", "EditScorecardDetails", new { id = Model.Scorecard.ID }, new { @class = "btn btn-secondary btn-sm action-btn" })
         @Html.ActionLink("Add Tests", "AddScorecardTests", new { id = Model.Scorecard.ID }, new { @class = "btn btn-success btn-sm action-btn" })
     </div>
     <br />
-    <br />
-    <br />
+    <hr />
+</div>
 
-    <h3 style="float: left">Scorecard Tests</h3>
-    <table class="table text-col">
-        @{
-            var defaultTest = Model.Tests.FirstOrDefault();
-        }
-        <thead>
-            <tr>
-                <th>
-                    Category
-                </th>
-                <th>
-                    Description
-                </th>
-                <th>
-                    Value
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.Tests)
+<br />
+<br />
+@foreach (var category in Model.Categories)
+{
+    var categoryTests = Model.GetCategoryTests(category.ID);
+    var defaultTest = categoryTests.FirstOrDefault();
+    var categoryDivID = $"category-{category.ID}";
+
+    if (categoryTests.Any())
+    {
+        <div id='@categoryDivID'>
+            <h2 style="float:left">@category.Name</h2>
+            <br />
+            <br />
+            <br />
+
+            @foreach (var test in categoryTests)
             {
-                var categoryName = Model.GetCategoryName(item.CategoryID);
+                var testDivID = $"test-{test.ID}";
 
-                <tr>
-                    <td width="10%">
-                        @Html.DisplayFor(modelItem => categoryName)
-                    </td>
-                    <td width="50%">
-                        @Html.DisplayFor(modelItem => item.Description)
-                    </td>
-                    <td width="10%">
-                        @Html.DisplayFor(modelItem => item.Value)
-                    </td>
-                    <td width="30%">
-                        @Html.ActionLink("Remove", "RemoveScorecardTest", new { id = item.ID, scorecardID = Model.Scorecard.ID },
-                            new { @class = "btn btn-warning btn-sm action-btn" })
-                        @Html.ActionLink("Edit", "EditScorecardTest", new { id = item.ID },
-                            new { @class = "btn btn-secondary btn-sm action-btn" })
-                    </td>
-                </tr>
+                <div id="@testDivID">
+
+                    <label class="desc-label">Description: </label> @test.Description <br />
+                    <label class="desc-label">Expected Result: </label> @test.ExpectedResult <br />
+                    <label class="desc-label">Value: </label> @test.Value <br />
+                    <label class="desc-label">Order: </label>   @test.Order
+
+                    <br />
+                    <br />
+                    @Html.ActionLink("Edit", "EditScorecardTest", new { id = test.ID },
+                        new { @class = "btn btn-primary btn-sm action-btn", @style = "float:right" })
+                    @Html.ActionLink("Remove", "RemoveScorecardTest", new { id = test.ID, scorecardID = Model.Scorecard.ID },
+                        new { @class = "btn btn-danger btn-sm action-btn", @style = "float:right; margin-right: 10px;" })
+                    <br />
+                    <hr />
+                </div>
             }
-        </tbody>
-    </table>
-</div>
-<div>
-    <a asp-action="Index">Back to Setup</a>
-</div>
+            <br />
+            <br />
+        </div>
+    }
+}

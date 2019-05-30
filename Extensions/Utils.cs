@@ -10,6 +10,29 @@ namespace TestingFramework.Extensions
 {
     public class Utils
     {
+        public class Ordering
+        {
+            public static IEnumerable<int> GetDefaults()
+            {
+                var defaults = new List<int>();
+
+                for (var i = 1; i < 100; i++)
+                {
+                    defaults.Add(i);
+                }
+
+                return defaults;
+            }
+
+            public static List<ScorecardTestModel> SortScorecardTests(List<ScorecardTestModel> tests)
+            {
+                tests = tests.OrderBy(t => t.Order).ToList();
+
+                return tests;
+            }
+        }
+
+
         public class Import
         {
             public static List<ImportTestModel> CreateTests(char separator, string text)
@@ -32,7 +55,7 @@ namespace TestingFramework.Extensions
                             Value = value
                         });
                     }
-                    catch { /* Need error logging here */ }
+                    catch (Exception ex) { LoggingUtil.AddException(ex); }
                 }
 
                 return tests;
