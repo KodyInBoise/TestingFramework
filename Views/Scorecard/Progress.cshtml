@@ -17,7 +17,24 @@
     }
 
     .header {
-        text-align: center
+        text-align: center;
+    }
+
+    .desc-label {
+        font-weight: bold;
+        padding-top: 5px;
+    }
+
+    .passed-label {
+        color: green;
+        font-style: italic;
+        font-weight: bold;
+    }
+
+    .failed-label {
+        color: red;
+        font-style: italic;
+        font-weight: bold;
     }
 </style>
 
@@ -90,43 +107,47 @@
     var categoryDivID = $"category-{category.ID}";
 
     <div id='@categoryDivID'>
-        <h3 style="float:left">@category.Name</h3>
-        <!-- @Html.ActionLink("Start", "CategoryTests", new { id=Model.Progress.ID, categoryID = category.ID }, new { @class = "btn btn-success h3-btn", @style = "float:right" }) -->
-        <table class="table text-col">
-            <thead>
-                <tr>
-                    <th width="65%">
-                        Description
-                    </th>
-                    <th width="13%">
-                        Status
-                    </th>
-                    <th style="text-align:right" width="22%">
-                        @categoryCompletion Complete
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in categoryTests)
+        <h2 style="float:left">@category.Name</h2>
+        <br />
+        <br />
+        <br />
+
+        @foreach (var test in categoryTests)
+        {
+            var testStatus = Model.GetTestStatusString(test.ID, out var testPassed);
+            var testDivID = $"test-{test.ID}";
+
+            <div id="@testDivID">
+
+                <label class="desc-label">Description: </label> @test.Description <br />
+                <label class="desc-label">Expected Result: </label> @test.ExpectedResult <br />
+                <label class="desc-label">Status: </label>
+
+                @if (testPassed == true)
                 {
-                    var testStatus = Model.GetTestStatus(item.ID);
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Description)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => testStatus)
-                        </td>
-                        <td>
-                            @Html.ActionLink("Fail", "UpdateTestResult", new { progressID = Model.Progress.ID, testID = item.ID, passed = false },
-                                new { @class = "btn btn-danger btn-sm row-btn", @style = "float:left" })
-                            @Html.ActionLink("Pass", "UpdateTestResult", new { progressID = Model.Progress.ID, testID = item.ID, passed = true },
-                                new { @class = "btn btn-success btn-sm row-btn", @style = "float:right" })
-                        </td>
-                    </tr>
+                    <label class="passed-label">@testStatus</label>
                 }
-            </tbody>
-        </table>
+                else if (testPassed == false)
+                {
+                    <label class="failed-label">@testStatus</label>
+                }
+                else
+                {
+                    <label>@testStatus</label>
+                }
+
+                <br />
+                <br />
+                @Html.ActionLink("Details", "EditTestResult", new { id = Model.Progress.ID, testID = test.ID },
+                    new { @class = "btn btn-secondary btn-sm row-btn", @style = "float:left" })
+                @Html.ActionLink("Pass", "UpdateTestResult", new { progressID = Model.Progress.ID, testID = test.ID, passed = true },
+                    new { @class = "btn btn-success btn-sm row-btn", @style = "float:right" })
+                @Html.ActionLink("Fail", "UpdateTestResult", new { progressID = Model.Progress.ID, testID = test.ID, passed = false },
+                    new { @class = "btn btn-danger btn-sm row-btn", @style = "float:right; margin-right: 10px;" })
+                <br />
+                <hr />
+            </div>
+        }
         <br />
         <br />
     </div>

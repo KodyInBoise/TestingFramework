@@ -17,7 +17,8 @@ namespace TestingFramework.Models
         public string Description { get; set; }
         public string ExpectedResult { get; set; }
         public double Value { get; set; }
-        
+        public int Order { get; set; }
+
         [NotMapped]
         public ScorecardTestResultModel Result { get; set; }
 
@@ -30,6 +31,8 @@ namespace TestingFramework.Models
                 CategoryID = test.CategoryID,
                 Description = test.Description,
                 ExpectedResult = test.ExpectedResult,
+                Value = test.Value,
+                Order = test.Order
             };
         }
     }

@@ -39,12 +39,13 @@ namespace TestingFramework.Controllers
         }
 
         [HttpGet]
-        public IActionResult Progress(Guid id, Guid categoryID = default(Guid))
+        public IActionResult Progress(Guid id, Guid testID = default(Guid))
         {
             var progress = _database.ScorecardsInProgress.Find(id);
 
             var scorecard = _database.Scorecards.Find(progress.ScorecardID);
-            scorecard.Tests = _database.ScorecardTests.Where(t => t.ScorecardID == scorecard.ID).ToList();
+            var scorecardTests = _database.ScorecardTests.Where(t => t.ScorecardID == scorecard.ID).ToList();
+            scorecard.Tests = Utils.Ordering.SortScorecardTests(scorecardTests);
 
             var categories = new List<CategoryModel>();
             var categoryIDs = scorecard.Tests.Select(t => t.CategoryID).Distinct().ToList();
@@ -56,7 +57,7 @@ namespace TestingFramework.Controllers
                 Scorecard = scorecard,
                 Categories = categories,
                 CategoryCompletePercentages = new Dictionary<Guid, string>(),
-                ScrollToDiv = Utils.ValidateGuid(categoryID) ? $"category-{categoryID}" : ""
+                ScrollToDiv = Utils.ValidateGuid(testID) ? $"test-{testID}" : ""
             };
 
             var results = progress.GetResults();
@@ -157,7 +158,7 @@ namespace TestingFramework.Controllers
                 return RedirectToAction("EditTestResult", new { id = progressID, testID = testID });
             }
 
-            return RedirectToAction("Progress", new { id = progressID, categoryID = categoryID });
+            return RedirectToAction("Progress", new { id = progressID, testID = testID });
         }
 
         [HttpGet]
@@ -276,7 +277,7 @@ namespace TestingFramework.Controllers
             _database.ScorecardsInProgress.Update(progress);
             _database.SaveChanges();
 
-            return RedirectToAction("Progress", new { id = viewModel.Result.ProgressID, categoryID = viewModel.Test.CategoryID });
+            return RedirectToAction("Progress", new { id = viewModel.Result.ProgressID, testID = viewModel.Test.ID });
         }
 
         [HttpGet]
