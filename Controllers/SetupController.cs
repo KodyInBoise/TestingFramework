@@ -268,7 +268,15 @@ namespace TestingFramework.Controllers
                     _database.ScorecardTests.Remove(t);
                 });
 
+                var inProgress = _database.ScorecardsInProgress.Where(p => p.ScorecardID == scorecard.ID).ToList();
+                inProgress.ForEach(p =>
+                {
+                    _database.ScorecardsInProgress.Remove(p);
+                });
+
                 _database.SaveChanges();
+
+                LoggingUtil.AddEntry(User.Identity.Name, $"Deleted scorecard: {scorecard.Name}");
             }
 
             return RedirectToAction("Index");
