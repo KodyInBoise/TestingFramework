@@ -122,7 +122,7 @@ namespace TestingFramework.Controllers
         }
 
         [HttpGet]
-        public IActionResult ScorecardDetails(Guid id)
+        public IActionResult ScorecardDetails(Guid id, Guid testID = default(Guid))
         {
             var scorecard = _database.Scorecards.Find(id);
 
@@ -134,9 +134,13 @@ namespace TestingFramework.Controllers
             var viewModel = new ScorecardDetailsViewModel
             {
                 Scorecard = scorecard,
-                Tests = _database.ScorecardTests.Where(t => t.ScorecardID == scorecard.ID),
-                Categories = _database.Categories.ToList()
+                Categories = _database.Categories.ToList(),
+                ScrollToDiv = Utils.ValidateGuid(testID) ? $"test-{testID}" : ""
             };
+
+            var scorecardTests = _database.ScorecardTests.Where(t => t.ScorecardID == scorecard.ID).ToList();
+
+            viewModel.Tests = Utils.Ordering.SortScorecardTests(scorecardTests);
 
             return View(viewModel);
         }
@@ -210,7 +214,7 @@ namespace TestingFramework.Controllers
             _database.ScorecardTests.Update(test);
             _database.SaveChanges();
 
-            return RedirectToAction("ScorecardDetails", new { id = test.ScorecardID });
+            return RedirectToAction("ScorecardDetails", new { id = test.ScorecardID, testID = test.ID });
         }
 
         [HttpGet]

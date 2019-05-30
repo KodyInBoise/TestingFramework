@@ -11,5 +11,6 @@ namespace TestingFramework.Interfaces
         Guid CategoryID { get; set; }
         string Description { get; set; }
         string ExpectedResult { get; set; }
+        int Order { get; set; }
     }
 }
