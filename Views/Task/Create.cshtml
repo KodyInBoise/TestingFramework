@@ -27,6 +27,12 @@
                 @Html.DropDownListFor(model => model.SelectedOwner, Model.UserOptions, "", new { @style = "width:100%" })
             </div>
             <br />
+
+            <div>
+                <label class="label">Task Type</label>
+                @Html.DropDownListFor(model => model.SelectedTaskType, Model.TaskTypeOptions, new { @style = "width:100%" })
+            </div>
+            <br />
             
             <label class="label">Description</label>
             @Html.TextAreaFor(model => Model.Description, new { @class = "entry-text" })

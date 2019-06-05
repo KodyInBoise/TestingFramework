@@ -36,9 +36,16 @@ namespace TestingFramework
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+#if DEBUG
+            services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseNpgsql(
+                    Configuration.GetConnectionString("PostgreSQL-Dev")));
+#else
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(
                     Configuration.GetConnectionString("PostgreSQL")));
+#endif
+
             services.AddDefaultIdentity<IdentityUser>()
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<ApplicationDbContext>();

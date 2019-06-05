@@ -37,10 +37,19 @@ namespace TestingFramework.Controllers
         {
             var viewModel = new CreateTaskViewModel
             {
-                UserOptions = new SelectList(_database.AspNetUsers.ToList(), "Id", "UserName")
+                UserOptions = new SelectList(_database.AspNetUsers.ToList(), "Id", "UserName"),
+                TaskTypeOptions = new SelectList(EnumExtensions.Tasks.GetTaskTypes(), "Value", "Name")
             };
 
+            viewModel.TaskTypeOptions.First().Selected = true;
+
             return View(viewModel);
+        }
+
+        [HttpGet]
+        public IActionResult Create(string taskType)
+        {
+            return View();
         }
 
         [HttpPost]
