@@ -46,12 +46,6 @@ namespace TestingFramework.Controllers
             return View(viewModel);
         }
 
-        [HttpGet]
-        public IActionResult Create(string taskType)
-        {
-            return View();
-        }
-
         [HttpPost]
         public IActionResult Create(CreateTaskViewModel viewModel)
         {
