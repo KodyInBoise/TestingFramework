@@ -90,6 +90,8 @@ namespace TestingFramework
                var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
 
                context.Database.Migrate();
+
+               RoleHelper.SeedAppRoles(context);
             }
 
             LoggingUtil.AddEntry("STARTUP", "Successfully applied database migrations.");
