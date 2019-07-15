@@ -319,7 +319,7 @@ namespace TestingFramework.Controllers
         [HttpPost]
         public IActionResult ImportTests(ImportTestsViewModel viewModel)
         {
-            var tests = Utils.Import.CreateTests(viewModel.Separator, viewModel.Text);
+            var tests = ImportExportUtil.CreateTests(viewModel.Separator, viewModel.Text);
             var allCategories = _database.Categories.ToList();
 
             tests.ForEach(t =>
