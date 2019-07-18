@@ -1,0 +1,17 @@
+﻿
+@{
+    ViewData["Title"] = "Import Data";
+}
+
+<h1>Import Application Data</h1>
+<hr />
+<form asp-controller="Setup" asp-action="ImportAppData" class="form-horizontal" enctype="multipart/form-data">
+   <div class="col-md-6">
+      <h5>Please select an application data backup file to import.</h5>
+      <br />
+      <br />
+      <input type="file" name="file" id="file" />
+      <br />
+      <input type="submit" class="btn btn-success" value="Upload" style="float:right; width: 150px;" />
+   </div>
+</form>

@@ -12,5 +12,8 @@ namespace TestingFramework.ViewModels.Tasks
         public string Description { get; set; }
         public SelectList UserOptions { get; set; }
         public Guid SelectedOwner { get; set; }
+        public SelectList TaskTypeOptions { get; set; }
+        public int SelectedTaskType { get; set; }
+        public Guid TaskObjectID { get; set; }
     }
 }

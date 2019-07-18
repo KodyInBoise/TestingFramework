@@ -120,7 +120,10 @@
             <div id="@testDivID">
 
                 <label class="desc-label">Description: </label> @test.Description <br />
-                <label class="desc-label">Expected Result: </label> @test.ExpectedResult <br />
+                @if (!string.IsNullOrEmpty(test.ExpectedResult))
+                {
+                    <label class="desc-label">Expected Result: </label> @test.ExpectedResult <br />
+                }
                 <label class="desc-label">Status: </label>
 
                 @if (testPassed == true)

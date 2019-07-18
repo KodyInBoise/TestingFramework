@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TestingFramework.Extensions;
+using static TestingFramework.Extensions.EnumExtensions;
 
 namespace TestingFramework.Models.Tasks
 {
@@ -16,6 +17,8 @@ namespace TestingFramework.Models.Tasks
         public string Status { get; set; }
         public DateTime Completed { get; set; }
         public List<TaskHistoryModel> History { get; set; }
+        public int TaskType { get; set; }
+        public Guid TaskTypeObjectID { get; set; }
 
 
         public TaskHistoryModel AddHistory(string body)
