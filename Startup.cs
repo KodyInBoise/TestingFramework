@@ -81,7 +81,6 @@ namespace TestingFramework
 
 
          LoggingUtil.Initialize();
-         LoggingUtil.AddEntry("APP", "Application started up");
 
          try
          {
@@ -94,11 +93,11 @@ namespace TestingFramework
                RoleHelper.SeedAppRoles(context);
             }
 
-            LoggingUtil.AddEntry("STARTUP", "Successfully applied database migrations.");
+            LoggingUtil.AddEntry("APP", "Application started up and applied database migrations.");
          }
          catch (Exception ex)
          {
-            LoggingUtil.AddEntry("STARTUP", $"Exception occurred applying database migrations: {ex.Message}");
+            LoggingUtil.AddEntry("APP", $"Exception occurred applying database migrations: {ex.Message}");
          }
       }
    }

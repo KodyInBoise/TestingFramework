@@ -1,15 +1,23 @@
 ﻿@model TestingFramework.ViewModels.Tasks.TasksHomeViewModel
 
+@using Microsoft.AspNetCore.Identity
+@using TestingFramework.Data
+@using TestingFramework.Extensions
+
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@inject ApplicationDbContext Database
+
 @{
-    ViewData["Title"] = "Tasks";
-    var defaultTask = Model.AvailableTasks.FirstOrDefault();
+   ViewData["Title"] = "Tasks";
+   var defaultTask = Model.AvailableTasks.FirstOrDefault();
 }
 
 <style>
-    .action-btn {
-        width: 100px;
-        float: right;
-    }
+   .action-btn {
+      width: 100px;
+      float: right;
+   }
 </style>
 
 <h1>Tasks</h1>
@@ -18,65 +26,69 @@
 
 <h3 style="float: left">Available Tasks</h3>
 @Html.ActionLink("New Task", "Create", new { }, new { @class = "btn btn-sm btn-success action-btn" })
-@Html.ActionLink("Closed Tasks", "Closed", new { }, new { @class = "btn btn-sm btn-warning action-btn", @style="margin-right: 15px" })
+@Html.ActionLink("Closed Tasks", "Closed", new { }, new { @class = "btn btn-sm btn-warning action-btn", @style = "margin-right: 15px" })
+@if (RoleHelper.UserIsAdmin(Database, User))
+{
+   @Html.ActionLink("All Tasks", "AllTasks", new { }, new { @class = "btn btn-sm btn-secondary action-btn", @style = "margin-right: 15px" })
+}
 <table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => defaultTask.Created)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => defaultTask.Description)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.AvailableTasks)
-        {
-            <tr>
-                <td width="20%">
-                    @Html.DisplayFor(modelItem => item.Created)
-                </td>
-                <td width="45%">
-                    @Html.DisplayFor(modelItem => item.Description)
-                </td>
-                <td width="20%">
-                    @Html.ActionLink("Details", "Details", new { id = item.ID }, new { @class = "btn btn-sm btn-primary action-btn" })
-                </td>
-            </tr>
-        }
-    </tbody>
+   <thead>
+      <tr>
+         <th>
+            @Html.DisplayNameFor(model => defaultTask.Created)
+         </th>
+         <th>
+            @Html.DisplayNameFor(model => defaultTask.Description)
+         </th>
+         <th></th>
+      </tr>
+   </thead>
+   <tbody>
+      @foreach (var item in Model.AvailableTasks)
+      {
+         <tr>
+            <td width="20%">
+               @Html.DisplayFor(modelItem => item.Created)
+            </td>
+            <td width="45%">
+               @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td width="20%">
+               @Html.ActionLink("Details", "Details", new { id = item.ID }, new { @class = "btn btn-sm btn-primary action-btn" })
+            </td>
+         </tr>
+      }
+   </tbody>
 </table>
 <br />
 
 <h3 style="float: left">My Tasks</h3>
 <table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => defaultTask.Created)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => defaultTask.Description)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.UserTasks)
-        {
-            <tr>
-                <td width="20%">
-                    @Html.DisplayFor(modelItem => item.Created)
-                </td>
-                <td width="45%">
-                    @Html.DisplayFor(modelItem => item.Description)
-                </td>
-                <td width="20%">
-                    @Html.ActionLink("Details", "Details", new { id = item.ID }, new { @class = "btn btn-sm btn-primary action-btn" })
-                </td>
-            </tr>
-        }
-    </tbody>
+   <thead>
+      <tr>
+         <th>
+            @Html.DisplayNameFor(model => defaultTask.Created)
+         </th>
+         <th>
+            @Html.DisplayNameFor(model => defaultTask.Description)
+         </th>
+         <th></th>
+      </tr>
+   </thead>
+   <tbody>
+      @foreach (var item in Model.UserTasks)
+      {
+         <tr>
+            <td width="20%">
+               @Html.DisplayFor(modelItem => item.Created)
+            </td>
+            <td width="45%">
+               @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td width="20%">
+               @Html.ActionLink("Details", "Details", new { id = item.ID }, new { @class = "btn btn-sm btn-primary action-btn" })
+            </td>
+         </tr>
+      }
+   </tbody>
 </table>
